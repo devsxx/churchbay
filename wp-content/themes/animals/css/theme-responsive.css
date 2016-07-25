@@ -1,0 +1,235 @@
+/* Mobile Portrait View */
+
+@media screen and (max-width:479px) {
+	
+	*{box-sizing:border-box;}
+	#header { width:100%; padding:0 0px 10px; position:inherit !important;}
+	#header .shaper { width:auto; border-right:none;}
+	#header .handler { width:100%; position:relative;}
+	#header .logo { margin-top:-70px; text-align:center; float:none;}
+	#slider .nivo-caption{ top:0; width:100%; left:0;}
+	#slider .nivo-caption .top-bar{ top:35px; padding:0 20px 17px;}
+	#slider .nivo-caption .top-bar h2{ font-size:17px; padding-bottom:25px; line-height:20px; padding-left:0; text-align:center;}
+	#slider .top-bar p{ display:none;}
+	#slider .nivo-caption .top-bar a.read-more{ display:none;}
+	#welcome { height:120px;}
+	#welcome .wel-shaper { width:auto; border-right:none; margin-top:40px;}
+	#welcome .wel-handler { width:100%; position:relative;}
+	#welcome .welcome-inner .wel-left { float:none;}
+	#welcome .welcome-inner .wel-left h2 { font-size:25px; text-align:center;}
+	#welcome .welcome-inner .wel-left p { font-size:12px; text-align:center;}
+	#welcome .welcome-inner .wel-right { float:none; padding-top:12px; text-align:center;}
+	#welcome .welcome-inner .wel-right a { font-size:25px;}
+	.container {width:95%;}
+
+/* ------ Extra ------ */
+	.toggle{display:block;}
+	.toggle a{width:100%; color:#ffffff; background:url(../images/mobile_nav_right.png) no-repeat right center #222222; padding:10px 10px; margin-top:20px; font-size:16px;}
+	.toggle a:hover{ color:#ffffff !important;}
+	.toggle a.active{color:#ffffff;}
+	.main-nav{display:none;}
+	.main-nav{float:none; margin:0; position:relative; overflow-x:hidden; width:100%;}
+	.main-nav ul{background:#000000; color:#000; width:100%; float:none !important; margin-left:0;}
+	.main-nav ul li{border-top:1px #303030 solid; display:block; float:none; text-align:left;}
+	#header .header-inner .main-nav ul li a{padding:5px 10px; display:block; color:#ffffff; font-size:13px;}
+	.main-nav ul li a:hover{color:#ffffff !important;}
+	.main-nav ul li ul, .nav ul li ul ul{ display:block !important;}
+	.main-nav ul li ul li a:before{content:"\00BB \00a0";}
+	.main-nav ul li ul li a{padding-left:20px !important;}
+	.main-nav ul li ul li ul li a{padding-left:30px !important;}
+	section{ padding:30px 0;}
+	.entry-content div { text-align:center;} 
+	.entry-content a.example-image-link { float:none; display:inline-block;}
+	.blog .blogposts { width:100%; margin:10px 0; padding:0;}
+	.blog .blogposts .blogdate h3 { font-size:35px; line-height:none;}
+	.blog .blogposts .blogdate h4 { font-size:15px; line-height:none;}
+	.blog .blogposts .blogcontent h4 a { font-size:13px; font-weight:bold;}
+	.blog .blogposts .blogcontent p { font-size:11px; line-height:16px;}
+	.blog .blogposts .blogcontent a { font-size:12px;}
+	.copyright-wrapper { padding:10px 0;}
+	.copyright-wrapper p { line-height:18px; text-align:center;}
+	.copyright-wrapper .inner{ width:95%;}
+	.copyright, .social-content{ margin-bottom:10px; width:100%;}
+	.social-icons { float:none; text-align:center;}
+	.social-icons a { margin-bottom:0; display:inline-table; float:none;}
+	.copyright-txt, .design-by { text-align:center; float:none;}
+
+/* --------- Pages ------- */
+	.content-area{ width:auto; margin:0 20px; padding:50px 0;}
+	.site-main{ width:auto; margin:0; padding:0; float:none !important;}
+	h2.entry-title { font-size:20px;}
+	#sidebar{ width:auto; margin:60px 0 0; padding:0; float:none;}
+	a.contact{ margin-top:5px !important; font-size:12px !important;}
+	#slider .nivo-directionNav a{ top:35%;}
+	h2.section-title{ margin-bottom:5px;}
+	.postmeta, .entry-meta { font-size:12px;}
+	
+}
+
+/* Mobile Landscape View */
+
+@media screen and (max-width:719px) and (min-width:480px) { 
+
+	*{box-sizing:border-box;}
+	#header { width:100%; padding:0 0px 10px; position:inherit !important;}
+	#header .shaper { width:auto; border-right:none;}
+	#header .handler { width:100%; position:relative;}
+	#header .logo { margin-top:-70px; text-align:center; float:none;}
+	#slider .top-bar { padding:0 20px; top:60px;}
+	#slider .top-bar h1 { font-size:30px; padding-bottom:5px;}
+	#slider .top-bar a{ font-size:18px; padding:8px 20px; margin-top:20px;}
+	#slider  .nivo-caption { text-align:center;}
+	#slider .nivo-caption{ top:11px; width:80%; height:90%;}
+	#slider .nivo-caption .top-bar{ top:52px; padding-bottom:20px;}
+	#slider .nivo-caption .top-bar h2{ font-size:24px; padding:10px 0; line-height:35px; text-align:center;}
+	#slider .top-bar a.read-more{ display:none;}
+	#welcome { height:120px;}
+	#welcome .wel-shaper { width:auto; border-right:none; margin-top:40px;}
+	#welcome .wel-handler { width:100%; position:relative;}
+	#welcome .welcome-inner .wel-left { float:none;}
+	#welcome .welcome-inner .wel-left h2 { font-size:30px; text-align:center;}
+	#welcome .welcome-inner .wel-left p { font-size:18px; text-align:center;}
+	#welcome .welcome-inner .wel-right { float:none; top:-14px; text-align:center; position:relative;}
+	#welcome .welcome-inner .wel-right a { font-size:30px;}
+	.container { width:95%;}
+	.alignleft, img.alignleft { float:none; display:block;}
+
+/* ------ Extra ------ */
+	.toggle{display:block;}
+	.toggle a{width:100%; color:#ffffff; background:url(../images/mobile_nav_right.png) no-repeat right center #222222; padding:10px 10px; margin-top:20px; font-size:16px;}
+	.toggle a:hover { color:#fdd835; text-decoration:none;}
+	.toggle a.active{color:#fdd835; text-decoration:none;}
+	.main-nav{display:none;}
+	#header .main-nav{float:none; margin:0; position:relative; overflow-x:hidden; }
+	#header .main-nav ul{background:#000000; color:#000; width:100%; float:none !important; margin-left:0; font-size:15px !important;}
+	#header .main-nav ul li{border-top:1px #303030 solid; display:block; float:none; text-align:left;}
+	.main-nav ul li a{padding:5px 10px; display:block; color:#ffffff !important;}
+	.main-nav ul li a:hover{color:#ffffff !important;}
+	.main-nav ul li ul li a:before{content:"\00BB \00a0";}
+	.main-nav ul li ul li a{padding-left:20px !important;}
+	.main-nav ul li ul li ul li a{padding-left:30px !important;}
+	#slider .top-bar p{ display:none;}
+	#prevslide, #nextslide{ top:0;}
+	section{ padding:40px 0;}
+	.entry-content div { text-align:center;} 
+	.entry-content a.example-image-link { float:none; display:inline-block;}
+	.blog .blogposts { width:100%; margin:10px 0; padding:0;}
+	.blog .blogposts .blogdate h3 { font-size:40px; line-height:none;}
+	.blog .blogposts .blogdate h4 { font-size:20px; line-height:none;}
+	.blog .blogposts .blogcontent h4 a { font-size:18px; font-weight:bold;}
+	.blog .blogposts .blogcontent p { font-size:12px; line-height:20px;}
+	.blog .blogposts .blogcontent a { font-size:13px;}
+	.copyright-wrapper { padding:10px 0;}
+	.copyright-wrapper p { line-height:18px; text-align:center;}
+	.copyright-wrapper .inner{ width:95%;}
+	.copyright, .social-content{ margin-bottom:10px; width:100%;}
+	.social-icons { float:none; text-align:center;}
+	.social-icons a { margin-bottom:0; display:inline-table; float:none;}
+	.copyright-txt, .design-by { text-align:center; float:none;}
+
+/* --------- Pages ------- */
+	.content-area{ width:auto; margin:0 20px; padding:50px 0;}
+	.site-main{ width:auto; margin:0; padding:0; float:none;}
+	#sidebar{ width:auto; margin:60px 0 0; padding:0; float:none;}
+	a.contact{ margin-top:5px !important; font-size:12px !important;}
+	.nivo-directionNav a{ top:39% !important;}
+	h2.section-title{ margin-bottom:5px;}
+
+}
+
+@media screen and (max-width:899px) and (min-width:320px) { 
+
+	h2.section-title { line-height:48px; font-size:30px !important; text-align:center;}
+	.cat_comments{ height:auto;}
+	#contact .column-2, #contact .column-2.last_column{ width:100%; float:none; margin:0 0 20px 0;}
+	.toggle a { color:#ffffff;}
+	.toggle a:hover { color:#ffffff; text-decoration:none;}
+	.toggle a.active{color:#ffffff; text-decoration:none;}	
+}
+
+/* Tablet View */
+
+@media screen and (max-width:999px) and (min-width:720px) { 
+
+	*{box-sizing:border-box;}
+	.container { width:95%;}
+	#welcome .container{ width:95%; position:absolute; left:0; right:0;}
+	#header { width:100%; padding:0 0px 10px; position:inherit !important;}
+	#header .shaper { width:auto; border-right:none;}
+	#header .handler { width:100%; position:relative;}
+	#header .logo { margin-top:-70px; text-align:center; float:none;}
+	.slider-main .nivo-caption{ top:16%; width:65%; }
+	a.read-more, .common_btn{ margin-top:10px;}
+	#slider .nivo-caption .top-bar h2{ font-size:23px; line-height:34px; padding-left:25px; padding-top:10px;}
+	#slider .nivo-caption .top-bar p { font-size:12px;}
+	#welcome { height:53px;}
+	#welcome .wel-shaper { width:60%; border-bottom:80px solid #df6120; top:-27px;}
+	#welcome .wel-handler { width:100%;}
+	#welcome .wel-left { top:-10px;}
+	#welcome .wel-right { top:13px;}
+	#welcome .wel-left h2, #welcome .wel-right a { font-size:25px;}
+	#welcome .wel-left p { font-size:15px;}
+
+/* ------ Extra ------ */
+	.toggle{display:block;}
+	.toggle a{width:100%; color:#ffffff; background:url(../images/mobile_nav_right.png) no-repeat right center #222222; padding:10px 10px; margin-top:20px; font-size:16px;}
+	.toggle a:hover { color:#ffffff; text-decoration:none;}
+	.toggle a.active{color:#ffffff; text-decoration:none;}
+	.main-nav{display:none;}
+	#header .main-nav{float:none; margin:0; position:relative; overflow-x:hidden; }
+	#header .main-nav ul{background:#000000; color:#000; width:100%; float:none; margin-left:0; font-size:15px !important; }
+	#header .main-nav ul li{border-top:1px #303030 solid; display:block; float:none; text-align:left;}
+	.main-nav ul li a{padding:5px 5px 5px 15px; display:block; color:#ffffff !important;}
+	.main-nav ul li a:hover{color:#ffffff !important; padding-left:15px; padding-right:5px;}
+	.main-nav ul li ul li a:before{content:"\00BB \00a0";}
+	.main-nav ul li ul li a{padding-left:25px !important;}
+	.main-nav ul li ul li ul li a{padding-left:35px !important;}
+	section { padding:30px 0;}
+	.blog .blogposts { width:50%; margin-right:0;}
+	.blog .blogposts .blogcontent h4 a { font-size:15px;}
+	.blog .blogposts .blogcontent p { font-size:12px; line-height:18px;}
+	.blog .blogposts .blogcontent a { font-size:13px;}
+
+/* --------- Pages ------- */
+	.content-area{ width:auto; margin:0 20px; padding:50px 0;}
+	.alignleft, img.alignleft { float:none; display:block;}
+	.site-main{ width:63%; margin:0; padding:0; float:left;}
+	#sidebar{ width:30%; margin:0; padding:0; float:right;}
+	a.contact{ margin-top:15px !important; font-size:18px !important;}
+	a.select {font-size: 15px; left: 20%;}		
+	.cat_comments .cat, .cat_comments .comnt{ font-size:10px;}
+	.copyright-wrapper { padding:15px 0;}
+	.copyright-wrapper .inner{ width:95%; margin:auto;}
+	.copyright { width:auto; padding:0;}
+	.social-icons a { margin-right:6px; margin-bottom:0;}
+
+}
+
+@media screen and (min-width: 1000px) {
+	
+	#header { width:100%; padding:0; position:inherit !important;}
+	#header .main-nav{ /*width:100%;*/}
+	#header .main-nav ul li ul li{display:block; position:relative; float:none;}
+	#header .main-nav ul li ul li a{color:#ffffff; display:block; padding-top:10px; padding-bottom:10px; border-bottom:1px #313131 solid; padding-right:0px !important;}
+	.toggle a { text-decoration:none;}
+	.toggle a:hover { color:#0bb5c7; text-decoration:none;}
+	.toggle a.active{color:#0bb5c7; text-decoration:none;}
+	.site-main { width:70%;}
+	#slider .nivo-caption .top-bar{ top:-20px; margin-bottom:0;}
+	#slider .nivo-caption .top-bar h2 { font-size:35px; line-height:normal;}	
+	.one_third, .one_third .last_column { width:31%;}
+	#welcome .wel-handler { width:auto;}
+	.blog .blogposts { width:50%; margin-right:0;}
+	.blog .blogposts .blogcontent h4 a { font-size:15px;}
+	.blog .blogposts .blogcontent p { font-size:12px; line-height:18px;}
+	.blog .blogposts .blogcontent a { font-size:13px;}
+}
+
+@media screen and (min-width:1000px) and (max-width:1159px){
+	.container { width:95%;}
+	#header .handler { width:95%;}
+	.copyright-wrapper .inner{ width:95%;}
+	.nivo-caption{ top:17% !important; height:auto !important;}
+	.cat_comments .cat{ width:48%;}
+	.content-area{ width:95%; padding:50px 0; margin:0 auto;}
+}

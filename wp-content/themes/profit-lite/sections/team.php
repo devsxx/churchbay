@@ -1,1 +1,0 @@
-<?php/* * team section */if (has_action('mp_profit_section_team')) {    do_action('mp_profit_section_team');}

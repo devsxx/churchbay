@@ -1,1 +1,0 @@
-<?php/* * Calculator section */if (has_action('mp_profit_section_calculator')) {    do_action('mp_profit_section_calculator');}

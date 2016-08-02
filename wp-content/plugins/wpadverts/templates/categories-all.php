@@ -14,16 +14,16 @@
                     <?php endif; ?>
                 </a>
             </span>
-            
+
             <ul class="adverts-flexbox-list">
                 <?php
-                    $subs = get_terms( 'advert_category', array( 
-                        'hide_empty' => 0, 
+                    $subs = get_terms( 'advert_category', array(
+                        'hide_empty' => 0,
                         'parent' => $term->term_id ,
                         'number' => $sub_count
                     ) );
                 ?>
-            
+
                 <?php foreach($subs as $sub): ?>
                 <li>
                     <a href="<?php esc_attr_e(get_term_link($sub)) ?>">
@@ -51,4 +51,4 @@
         <span><?php _e("No categories found.", "adverts") ?></span>
     </div>
 </div>
-<?php endif; ?> 
+<?php endif; ?>

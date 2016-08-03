@@ -1,9 +1,7 @@
 <?php
 /*
- * Plugin Name: Custom Email Notification
- * Plugin URI: http://wpadverts.com/
- * Description: Replaces WPAdverts custom email</strong>
- * Author: Greg Winiarski
+ * Plugin Name: Custom Email Message.
+ * Description: This plugin replaces default registration email message.
  */
 function custom_new_user_notification( $user_id, $deprecated = null, $notify = '', $password = null ) {
     if ( $deprecated !== null ) {
@@ -46,5 +44,5 @@ add_action( "init", "custom_registration_email_init", 20 );
 
 function custom_registration_email_init() {
     remove_action( 'adverts_new_user_notification', 'wp_new_user_notification' );
-    add_action( 'adverts_new_user_notification', 'custom_new_user_notification', 10, 3 );
+    add_action( 'adverts_new_user_notification', 'custom_new_user_notification', 10, 4 );
 }

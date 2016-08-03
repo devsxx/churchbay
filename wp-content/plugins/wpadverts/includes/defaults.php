@@ -1,16 +1,16 @@
 <?php
 /**
  * Adverts Defaults
- * 
+ *
  * Load class-adverts.php and functions.php before using this file
- * 
+ *
  * This file contains default values for frontend "post ad" form structure and currency.
- * 
+ *
  * Registers Form fields and validators.
  *
  * @uses Adverts
  * @uses adverts_config
- * 
+ *
  * @package     Adverts
  * @copyright   Copyright (c) 2015, Grzegorz Winiarski
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
@@ -55,7 +55,7 @@ Adverts::instance()->set("form", array(
             "order" => 10,
             "label" => __( "Contact Person", "adverts" ),
             "is_required" => true,
-            "validator" => array( 
+            "validator" => array(
                 array( "name" => "is_required" ),
             )
         ),
@@ -65,7 +65,7 @@ Adverts::instance()->set("form", array(
             "order" => 10,
             "label" => __( "Email", "adverts" ),
             "is_required" => true,
-            "validator" => array( 
+            "validator" => array(
                 array( "name" => "is_required" ),
                 array( "name" => "is_email" ),
                 array( "name" => "is_email_registered")
@@ -160,7 +160,7 @@ Adverts::instance()->set("form_search", array(
             ),
             "meta" => array(
                 "search_group" => "visible",
-                "search_type" => "half" 
+                "search_type" => "half"
             )
 
         ),
@@ -248,7 +248,7 @@ adverts_form_add_field("adverts_field_radio", array(
 ));
 
 // Register custom image upload field
-/** @see adverts_field_gallery() */ 
+/** @see adverts_field_gallery() */
 adverts_form_add_field("adverts_field_gallery", array(
     "renderer" => "adverts_field_gallery",
     "callback_save" => null,
@@ -327,4 +327,3 @@ adverts_form_add_validator("string_length", array(
     ),
     "validate_empty" => false
 ));
-

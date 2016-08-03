@@ -19,7 +19,7 @@
         <?php call_user_func( adverts_field_get_renderer($field), $field) ?>
         <?php endforeach; ?>
 
-        <?php if( !empty( $fields_visible ) ): ?>
+        <!-- <?php if( !empty( $fields_visible ) ): ?>
         <div class="adverts-search">
             <?php foreach( $fields_visible as $field ): ?>
             <div class="advert-input <?php esc_attr_e( 'advert-input-type-' . $field['meta']['search_type'] ) ?>">
@@ -36,7 +36,7 @@
             </div>
             <?php endforeach; ?>
         </div>
-        <?php endif; ?>
+        <?php endif; ?> -->
 
         <div class="adverts-options-left adverts-js">
             <?php if($switch_views): ?>

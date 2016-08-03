@@ -97,11 +97,11 @@ select { max-width: 100%; }
 .mh-site-logo { padding: 20px; overflow: hidden; }
 .mh-header-text { margin: 5px 0; text-transform: uppercase; }
 .mh-header-title { font-size: 32px; font-size: 2rem; line-height: 1; }
-.mh-header-tagline { display: inline-block; font-size: 14px; font-size: 0.875rem; line-height: 1; color: #e64946; padding-top: 10px; margin-top: 10px; border-top: 1px solid #e5e5e5; }
+.mh-header-tagline { display: inline-block; font-size: 14px; font-size: 0.875rem; line-height: 1; color:#E64946; padding-top: 10px; margin-top: 10px; border-top: 1px solid #e5e5e5; }
 
 /***** Navigation *****/
 
-.mh-main-nav-wrap { background: #2a2a2a; }
+.mh-main-nav-wrap { background: #FF7A5A; }
 .mh-main-nav { text-transform: uppercase; border-bottom: 5px solid #e64946; }
 .mh-main-nav li { float: left; position: relative; font-weight: 700; }
 .mh-main-nav li:hover { background: #e64946; }
@@ -193,7 +193,7 @@ html[xmlns] .slides { display: block; }
 /***** Posts/Pages *****/
 
 .entry-header, .page-header { margin-bottom: 20px; margin-bottom: 1.25rem; }
-.page-title { font-size: 24px; font-size: 1.5rem; padding: 10px 20px; background: #f5f5f5; }
+.page-title { font-size: 24px; font-size: 1.5rem; padding: 10px 0; background: white; text-transform: uppercase;}
 .mh-meta { font-size: 13px; font-size: 0.8125rem; }
 .mh-meta, .mh-meta a, .mh-footer .mh-meta a { color: #979797; }
 .mh-meta a:hover, .mh-footer .mh-meta a:hover { color: #e64946; }
@@ -254,11 +254,11 @@ a .pagelink { color: #000; background: #f5f5f5; }
 
 /***** Footer *****/
 
-.mh-footer { font-size: 13px; font-size: 0.8125rem; color: #fff; padding: 25px 25px 0; background: #2a2a2a; }
-.mh-footer a, .mh-footer a:hover { color: #f7f7f7; }
-.mh-copyright-wrap { padding: 10px 25px; border-top: 3px solid #999; background: #2a2a2a; }
-.mh-copyright { font-size: 12px; font-size: 0.75rem; color: #999; }
-.mh-copyright a { color: #999; }
+.mh-footer { font-size: 13px; font-size: 0.8125rem; color: #fff; padding: 25px 25px 0; background: #FF7A5A; }
+.mh-footer a, .mh-footer a:hover { color: #ffffff; }
+.mh-copyright-wrap { padding: 10px 25px; border-top: 3px solid #E64946; background: #FF7A5A; }
+.mh-copyright { font-size: 12px; font-size: 0.75rem; color: #ffffff; }
+.mh-copyright a { color: #ffffff; }
 
 /***** Images / Video *****/
 

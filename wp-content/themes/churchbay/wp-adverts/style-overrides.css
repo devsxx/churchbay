@@ -1,0 +1,18 @@
+/* Srtyle overrides for WP Adverts */
+
+.advert-post-title {
+    padding: 1em;
+}
+.advert-published {
+    padding: 0 1em;
+}
+.advert-img img {
+    margin: inherit;
+    width: 100%;
+}
+.advert-img {
+    height: 230px;
+}
+.advert-item span.advert-link {
+  color: #E64946;
+}

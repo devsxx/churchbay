@@ -32,5 +32,6 @@
 </div>
 <?php mh_after_footer(); ?>
 <?php wp_footer(); ?>
+<link href='<?php echo get_stylesheet_directory_uri(); ?>/wp-adverts/style-overrides.css' rel='stylesheet' type='text/css'>
 </body>
 </html>

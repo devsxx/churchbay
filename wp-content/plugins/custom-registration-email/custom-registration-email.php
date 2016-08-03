@@ -1,8 +1,9 @@
 <?php
 /*
- * Plugin Name: Custom Email Message.
- * Description: This plugin replaces default registration email message.
+ * Plugin Name: Custom Registration Email
+ * Description: This plugin replaces custom registration email
  */
+
 function custom_new_user_notification( $user_id, $deprecated = null, $notify = '', $password = null ) {
     if ( $deprecated !== null ) {
         _deprecated_argument( __FUNCTION__, '4.3.1' );
@@ -15,9 +16,9 @@ function custom_new_user_notification( $user_id, $deprecated = null, $notify = '
     // we want to reverse this for the plain text arena of emails.
     $blogname = wp_specialchars_decode(get_option('blogname'), ENT_QUOTES);
 
-    $message  = sprintf(__('New user registration on your site %s:'), $blogname) . "\r\n\r\n";
-    $message .= sprintf(__('Username: %s'), $user->user_login) . "\r\n\r\n";
-    $message .= sprintf(__('E-mail: %s'), $user->user_email) . "\r\n";
+    $message  = sprintf(__('New user registration on your site %s:'), $blogname) . "<br /><br />";
+    $message .= sprintf(__('Username: %s'), $user->user_login) . "<br />";
+    $message .= sprintf(__('E-mail: %s'), $user->user_email) . "<br />";
 
     @wp_mail(get_option('admin_email'), sprintf(__('[%s] New User Registration'), $blogname), $message);
 
@@ -32,11 +33,15 @@ function custom_new_user_notification( $user_id, $deprecated = null, $notify = '
     // change the URL below to actual page with [adverts_manage] shortcode.
     $manage_url = home_url() . "/adverts/manage/";
 
-    $message  = sprintf(__('Username: %s'), $user->user_login) . "\r\n";
-    $message .= sprintf(__('Password: %s'), $password ) . "\r\n";
-    $message .= 'To manage your Ads please use the following address ' . $manage_url . "\r\n";
+    $message = "Hello,\r\n\r\n";
+    $message .= "Thank you for posting your ad and registering with our classifieds website. All proceedings go to the Church.\r\n";
+    $message .= "Your login details are below. Please keep these safe.\r\n\r\n";
+    $message .= sprintf(__('Username: %s'), $user->user_login) . "\r\n";
+    $message .= sprintf(__('Password: %s'), $password ) . "\r\n\r\n";
+    $message .= 'To manage your Ads please use the following address ' . $manage_url . "\r\n\r\n";
+    $message .= "Thank you! \r\n\r\n";
 
-    wp_mail($user->user_email, sprintf(__('[%s] Your username and password'), $blogname), $message);
+    wp_mail($user->user_email, sprintf(__('[%s] Your username and password'), $blogname), nl2br($message));
 
 }
 

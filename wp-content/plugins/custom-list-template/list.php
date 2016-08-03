@@ -11,55 +11,6 @@
 <?php if (is_active_sidebar('home-1')) { ?>
     <?php dynamic_sidebar('home-1'); ?>
 <?php } ?>
-<?php if( $search_bar == "enabled" ): ?>
-<div class="adverts-options">
-    <form action="<?php echo esc_attr( $action ) ?>" class="adverts-search-form" method="get">
-
-        <?php foreach($form->get_fields( array( "type" => array( "adverts_field_hidden" ) ) ) as $field): ?>
-        <?php call_user_func( adverts_field_get_renderer($field), $field) ?>
-        <?php endforeach; ?>
-
-        <!-- <?php if( !empty( $fields_visible ) ): ?>
-        <div class="adverts-search">
-            <?php foreach( $fields_visible as $field ): ?>
-            <div class="advert-input <?php esc_attr_e( 'advert-input-type-' . $field['meta']['search_type'] ) ?>">
-                <?php call_user_func( adverts_field_get_renderer($field), $field) ?>
-            </div>
-            <?php endforeach; ?>
-        </div>
-        <?php endif; ?>
-        <?php if( !empty( $fields_hidden ) ): ?>
-        <div class="adverts-search adverts-search-hidden">
-            <?php foreach( $fields_hidden as $field ): ?>
-            <div class="advert-input <?php esc_attr_e( 'advert-input-type-' . $field['meta']['search_type'] ) ?>">
-                <?php call_user_func( adverts_field_get_renderer($field), $field) ?>
-            </div>
-            <?php endforeach; ?>
-        </div>
-        <?php endif; ?> -->
-
-        <div class="adverts-options-left adverts-js">
-            <?php if($switch_views): ?>
-            <a href="<?php echo esc_html( add_query_arg( "display", "grid" ) ) ?>" class="adverts-button-small adverts-switch-view" title="<?php esc_attr_e("Grid", "adverts") ?>"><span class="adverts-square-icon adverts-icon-th-large"></span></a>
-            <a href="<?php echo esc_html( add_query_arg( "display", "list" ) ) ?>" class="adverts-button-small adverts-switch-view" title="<?php esc_attr_e("List", "adverts") ?>"><span class="adverts-square-icon adverts-icon-th-list"></span></a>
-            <?php endif; ?>
-
-            <!--a href="#" class="adverts-button-small adverts-filter-date"><?php _e("Date") ?> <span class="adverts-icon-sort"></span></a-->
-        </div>
-
-        <div class="adverts-options-right adverts-js">
-            <?php if( !empty( $fields_hidden ) ): ?>
-            <a href="#" class="adverts-form-filters adverts-button-small"><span><?php _e("Advanced Search", "adverts") ?> <span class="adverts-advanced-search-icon adverts-icon-down-open"></a>
-            <?php endif; ?>
-            <a href="#" class="adverts-form-submit adverts-button-small"><?php _e("SEARCH", "adverts") ?> <span class="adverts-icon-search"><span></a>
-        </div>
-
-        <div class="adverts-options-fallback adverts-no-js">
-            <input type="submit" value="<?php _e("Filter Results", "adverts") ?>" />
-        </div>
-    </form>
-</div>
-<?php endif; ?>
 
 <?php if( $show_results ): ?>
 <div class="adverts-list">

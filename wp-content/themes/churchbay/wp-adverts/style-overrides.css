@@ -12,6 +12,9 @@
 }
 .advert-img {
     height: 230px;
+    background-image: url('../images/placeholder-advert.gif');
+    background-repeat: no-repeat;
+    background-position: center center;
 }
 .advert-item span.advert-link {
   color: #E64946;

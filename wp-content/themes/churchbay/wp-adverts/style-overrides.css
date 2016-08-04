@@ -19,3 +19,22 @@
 .advert-item span.advert-link {
   color: #E64946;
 }
+.adverts-buy-box {
+    background-color: #84bf26;
+    color: white;
+    text-align: center;
+    font-size: 1.6em;
+    padding: 0.2em 1em 0.2em 1em;
+      display: inline;
+}
+.adverts-buy-box a{
+  color: white !important;
+}
+.clear {
+  width: 100%;
+  clear: both;
+}
+.stripe-button-el span {
+    padding: 8px 12px;
+    font-size: 20px;
+}

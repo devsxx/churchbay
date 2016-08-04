@@ -64,4 +64,4 @@
     <?php echo $post_content ?>
 </div>
 
-<?php  do_action( "adverts_tpl_single_bottom", $post_id ) ?>
+<?php do_action( "adverts_tpl_single_bottom", $post_id ) ?>

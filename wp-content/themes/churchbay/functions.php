@@ -162,5 +162,12 @@ function sc_after_charge_example( $charge_response ) {
 }
 add_action( 'sc_after_charge', 'sc_after_charge_example' );
 
+// Send a very basic email right before the page redirect and only if the transaction was successful
+function sc_redirect_before_example( $failed ) {
+    if( ! $failed ) {
+        wp_mail( 'john@eurotalk.com', 'New Purchase', 'A new purchase has been made on your website!' );
+    }
+}
+add_action( 'sc_redirect_before', 'sc_redirect_before_example' );
 
 ?>

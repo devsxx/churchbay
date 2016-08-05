@@ -38,3 +38,6 @@
     padding: 8px 12px;
     font-size: 20px;
 }
+.adverts-field-name-adverts_stripe_id {
+  display: none;
+}

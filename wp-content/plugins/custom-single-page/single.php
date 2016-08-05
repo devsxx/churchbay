@@ -65,6 +65,6 @@
 </div>
 <br />
 <p>
-  [stripe payment_button_label="BUY NOW FOR <?php echo adverts_price_amount( get_post_meta( $post_id, "adverts_price", true) ) ?>" amount="<?php echo adverts_price_stripe_amount( get_post_meta( $post_id, "adverts_price", true) ) ?>"]
+  [stripe payment_button_label="BUY NOW FOR <?php echo adverts_price_amount( get_post_meta( $post_id, "adverts_price", true) ) ?>" amount="<?php echo adverts_price_stripe_amount( get_post_meta( $post_id, "adverts_price", true) ) ?>" ]
 </p>
 <p>Buying this item will donate <?php echo adverts_price_amount( get_post_meta( $post_id, "adverts_price", true) ) ?> to the Church</p>

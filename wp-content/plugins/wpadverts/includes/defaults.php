@@ -59,6 +59,7 @@ Adverts::instance()->set("form", array(
                 array( "name" => "is_required" ),
             )
         ),
+
         array(
             "name" => "adverts_email",
             "type" => "adverts_field_text",
@@ -82,6 +83,18 @@ Adverts::instance()->set("form", array(
                     "params" => array( "min" => 5 )
                 )
             )
+        ),
+        array(
+            "name" => "_item_stripe",
+            "type" => "adverts_field_header",
+            "order" => 20,
+            "label" => __( 'Stripe Details', 'adverts' )
+        ),
+        array(
+            "name" => "adverts_stripe_id",
+            "type" => "adverts_field_text",
+            "order" => 10,
+            "label" => __( "Stripe Transaction ID", "adverts" )
         ),
         array(
             "name" => "_item_information",

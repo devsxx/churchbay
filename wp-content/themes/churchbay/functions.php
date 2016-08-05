@@ -156,18 +156,58 @@ add_filter('show_admin_bar', '__return_false');
 // Takes the $charge_response as a parameter so you can pull information from the charge
 // For charge response info see: https://stripe.com/docs/api#charge_object
 function sc_after_charge_example( $charge_response ) {
+
+      wp_mail( 'john@eurotalk.com', 'New Purchase', 'A new purchase has been made on your website!' );
+
     // Useful for adding additional functionality after the charge is complete
     // For example something like storing the transaction ID in the database if you need to
-    print_($charge_response);
+    //print_r($charge_response);
+    //
+    $charge_response = $charge_response->__toArray(TRUE);
+
+    global $sc_options;
+
+    $key = '';
+
+    // Check first if in live or test mode.
+    if ( $sc_options->get_setting_value( 'enable_live_key' ) == 1 && $test_mode != 'true' ) {
+      if ( ! ( null === $sc_options->get_setting_value( 'live_secret_key_temp' ) ) ) {
+        $key = $sc_options->get_setting_value( 'live_secret_key_temp' );
+      } else {
+        $key = $sc_options->get_setting_value( 'live_secret_key' );
+      }
+    } else {
+      if ( ! ( null === $sc_options->get_setting_value( 'test_secret_key_temp' ) ) ) {
+        $key = $sc_options->get_setting_value( 'test_secret_key_temp' );
+      } else {
+        $key = $sc_options->get_setting_value( 'test_secret_key' );
+      }
+    }
+    \Stripe\Stripe::setApiKey( $key );
+    $charge_response = \Stripe\Customer::retrieve( $charge_response['customer'] );
+
+    /** Buyer details **/
+
+    $charge_response = $charge_response->__toArray(TRUE);
+
+    $buyersEmail = $charge_response['email'];
+    $buyersName = $charge_response['sources']['data'][0]['name'];
+    $buyersAddress= $charge_response['sources']['data'][0]['address_line1'] . ', ' .$charge_response['sources']['data'][0]['address_city'] . ', ' .$charge_response['sources']['data'][0]['address_zip'];
+
+    print_r($buyersEmail . ' ' . $buyersName . $buyersAddress);
+
+    $post = get_post();
+    $getPost = get_metadata('post', $post->ID, $key='', $single=false);
+
+    /** Posters email */
+    $postersName = $getPost['adverts_person'][0];
+    $postersEmail = $getPost['adverts_email'][0];
+    $postersPhone = $getPost['adverts_phone'][0];
+
+    /* Buyer details */
+
+
 }
 add_action( 'sc_after_charge', 'sc_after_charge_example' );
-
-// Send a very basic email right before the page redirect and only if the transaction was successful
-function sc_redirect_before_example( $failed ) {
-    if( ! $failed ) {
-        wp_mail( 'john@eurotalk.com', 'New Purchase', 'A new purchase has been made on your website!' );
-    }
-}
-add_action( 'sc_redirect_before', 'sc_redirect_before_example' );
 
 ?>

@@ -1599,6 +1599,11 @@ function adverts_create_user_from_post_id( $ID, $update_post = false ) {
 
     $email_address = get_post_meta( $ID, "adverts_email", true );
     $full_name = get_post_meta( $ID, "adverts_person", true );
+    $address1 = get_post_meta( $ID, "adverts_address1", true );
+    $address2 = get_post_meta( $ID, "adverts_address2", true );
+    $address3 = get_post_meta( $ID, "adverts_address3", true );
+
+
     $user_id = null;
 
     if( null == username_exists( $email_address ) ) {
@@ -1640,9 +1645,14 @@ function _adverts_create_user_from_post_id( $user_id, $post_id ) {
 
     $email_address = get_post_meta( $post_id, "adverts_email", true );
     $full_name = get_post_meta( $post_id, "adverts_person", true );
+    $address1 = get_post_meta( $post_id, "adverts_address1", true );
+    $address2 = get_post_meta( $post_id, "adverts_address2", true );
+    $postcode = get_post_meta( $post_id, "adverts_postcode", true );
+    $phone = get_post_meta( $post_id, "adverts_phone", true );
+
     // Generate the password and create the user
     $password = wp_generate_password( 12, false );
-    $user_id = wp_create_user( $email_address, $password, $email_address );
+    $user_id = wp_create_user( $email_address, $password, $email_address);
 
     // Set the nickname
     wp_update_user(
@@ -1652,6 +1662,10 @@ function _adverts_create_user_from_post_id( $user_id, $post_id ) {
             'display_name'=>    $full_name
         )
     );
+
+    update_user_meta( $user_id,'address1', $address1 );
+    update_user_meta( $user_id,'address2', $address2 );
+    update_user_meta( $user_id,'postcode', $postcode );
 
     // Set the role
     $user = new WP_User( $user_id );

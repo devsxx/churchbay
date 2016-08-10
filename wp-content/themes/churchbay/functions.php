@@ -157,14 +157,9 @@ add_filter('show_admin_bar', '__return_false');
 // For charge response info see: https://stripe.com/docs/api#charge_object
 function sc_after_charge_example( $charge_response ) {
 
-      wp_mail( 'john@eurotalk.com', 'New Purchase', 'A new purchase has been made on your website!' );
 
-    // Useful for adding additional functionality after the charge is complete
-    // For example something like storing the transaction ID in the database if you need to
-    //print_r($charge_response);
-    //
+
     $charge_response = $charge_response->__toArray(TRUE);
-
     global $sc_options;
 
     $key = '';
@@ -172,42 +167,140 @@ function sc_after_charge_example( $charge_response ) {
     // Check first if in live or test mode.
     if ( $sc_options->get_setting_value( 'enable_live_key' ) == 1 && $test_mode != 'true' ) {
       if ( ! ( null === $sc_options->get_setting_value( 'live_secret_key_temp' ) ) ) {
-        $key = $sc_options->get_setting_value( 'live_secret_key_temp' );
-      } else {
-        $key = $sc_options->get_setting_value( 'live_secret_key' );
+      $key = $sc_options->get_setting_value( 'live_secret_key_temp' );
+        } else {
+      $key = $sc_options->get_setting_value( 'live_secret_key' );
       }
     } else {
       if ( ! ( null === $sc_options->get_setting_value( 'test_secret_key_temp' ) ) ) {
-        $key = $sc_options->get_setting_value( 'test_secret_key_temp' );
-      } else {
-        $key = $sc_options->get_setting_value( 'test_secret_key' );
+      $key = $sc_options->get_setting_value( 'test_secret_key_temp' );
+        } else {
+      $key = $sc_options->get_setting_value( 'test_secret_key' );
       }
     }
+
     \Stripe\Stripe::setApiKey( $key );
     $charge_response = \Stripe\Customer::retrieve( $charge_response['customer'] );
 
-    /** Buyer details **/
-
+    /**
+     * [$charge_response Charge details]
+     */
     $charge_response = $charge_response->__toArray(TRUE);
-
-    $buyersEmail = $charge_response['email'];
-    $buyersName = $charge_response['sources']['data'][0]['name'];
-    $buyersAddress= $charge_response['sources']['data'][0]['address_line1'] . ', ' .$charge_response['sources']['data'][0]['address_city'] . ', ' .$charge_response['sources']['data'][0]['address_zip'];
-
-    print_r($buyersEmail . ' ' . $buyersName . $buyersAddress);
 
     $post = get_post();
     $getPost = get_metadata('post', $post->ID, $key='', $single=false);
 
-    /** Posters email */
-    $postersName = $getPost['adverts_person'][0];
-    $postersEmail = $getPost['adverts_email'][0];
-    $postersPhone = $getPost['adverts_phone'][0];
+    update_post_meta($post->ID, 'adverts_stripe_id', $charge_response['id']);
+
+    /**
+     * Buyers details
+     */
+    $buyersEmail = $charge_response['email'];
+    $buyersName = $charge_response['sources']['data'][0]['name'];
+    $buyersAddress= $charge_response['sources']['data'][0]['address_line1'] . ', ' .$charge_response['sources']['data'][0]['address_city'] . ', ' .$charge_response['sources']['data'][0]['address_zip'];
+
+    /**
+     * Sellers details
+     */
+    $sellersName = $getPost['adverts_person'][0];
+    $sellersEmail = $getPost['adverts_email'][0];
+    $sellersPhone = null;
+    if(isset($getPost['adverts_phone'][0])) {
+      $sellersPhone = $getPost['adverts_phone'][0];
+    }
+
+    /**
+     * Post details
+     */
+    $item = $post->item;
+    $adLink = $post->guid;
+
+    add_filter( 'wp_mail_content_type', function( $content_type ) {
+      return 'text/html';
+    });
+
+    /**
+     * Send a notification email to the seller
+     */
+    $html_sellers_email  = '<p>Congratulations!</p>';
+    $html_sellers_email .= '<p>Your item <b>' . $item . '</b> has been sold and the donation has been made to the Church.</p>';
+    $html_sellers_email .= '<p>Please contact the buyer <i>' . $buyersName . '</i> to arrange collection.<br />';
+
+    $html_sellers_email .= '<p><b>Buyers contact email:</b> <a href="mailto:'.$buyersEmail.'">'.$buyersEmail.'</a><br />';
+    $html_sellers_email .= '<p><b>Buyers address:</b> ' . $buyersAddress . '</p>';
+
+    $html_sellers_email .= '<p>Now that you item has been sold, you can now login to your account and delete the advert. To login in to your account click the "Manage My Ads" from the main menu.</p>';
+    $html_sellers_email .= '<p>Your ad: ' . $adLink . '</p>';
+    $html_sellers_email .= '<p>Thank you for supporting our Church!</p>';
+
+    wp_mail( $sellersEmail, 'Hurrah! Your item has been sold', $html_sellers_email );
+
+    /**
+     * Send a notification email to the buyer
+     */
+    $html_buyers_email  = '<p>Congratulations!</p>';
+    $html_buyers_email .= '<p>You have usccessfully purchased the item <b>' . $item . '</b> and your donation has been made to the Church.</p>';
+    $html_buyers_email .= '<p>Please contact the seller <i>' . $sellersName . '</i> to arrange collection.<br />';
+
+    $html_buyers_email .= '<p><b>Sellers contact email:</b> <a href="mailto:'.$sellersEmail.'">'.$sellersEmail.'</a><br />';
+    if(!empty($sellersPhone)) {
+      $html_buyers_email .= '<b>Sellers contact Phone:</b> <a href="tel:'.$sellersPhone.'">'.$sellersPhone.'</a></p>';
+    }
+    $html_buyers_email .= '<p>Thank you for supporting our Church!</p>';
+
+    wp_mail( $buyersEmail, 'You have successfully purchased and item', $html_buyers_email );
 
     /* Buyer details */
-
+    $html = '<div class="sc-payment-details-wrap">';
+    $html .= '<h4>You have purchased this item!</h4>';
+    $html .= '<p>Thanks for purchasing this item, and email has been sent to seller notifiying them of the purchase.</p>';
+    $html .= '<p>Please contact the seller <b>'.$sellersName.'</b> to arrange collection<br />';
+    $html .= '<p><b>Sellers Contact Email:</b> <a href="mailto:'.$sellersEmail.'">'.$sellersEmail.'</a><br />';
+    if(!empty($sellersPhone)) {
+      $html .= '<b>Sellers contact Phone:</b> <a href="tel:'.$sellersPhone.'">'.$sellersPhone.'</a></p>';
+    }
+    $html .='</div>';
+    echo $html;
 
 }
 add_action( 'sc_after_charge', 'sc_after_charge_example' );
+
+
+add_action( 'show_user_profile', 'add_extra_social_links' );
+add_action( 'edit_user_profile', 'add_extra_social_links' );
+
+function add_extra_social_links( $user )
+{
+    ?>
+        <h3>User Address</h3>
+
+        <table class="form-table">
+            <tr>
+                <th><label for="address1">Address 1</label></th>
+                <td><input type="text" name="address1" value="<?php echo esc_attr(get_the_author_meta( 'address1', $user->ID )); ?>" class="regular-text" /></td>
+            </tr>
+
+            <tr>
+                <th><label for="address2">Address 2</label></th>
+                <td><input type="text" name="address2" value="<?php echo esc_attr(get_the_author_meta( 'address2', $user->ID )); ?>" class="regular-text" /></td>
+            </tr>
+
+            <tr>
+                <th><label for="postcode">Postcode</label></th>
+                <td><input type="text" name="postcode" value="<?php echo esc_attr(get_the_author_meta( 'postcode', $user->ID )); ?>" class="regular-text" /></td>
+            </tr>
+        </table>
+    <?php
+}
+
+// add_action( 'personal_options_update', 'save_address' );
+// add_action( 'edit_user_profile_update', 'save_address' );
+//
+// function save_address( $user_id )
+// {
+//     update_user_meta( $user_id,'address1', 'x');
+//     update_user_meta( $user_id,'address2', 'x');
+//     update_user_meta( $user_id,'postcode', 'x');
+// }
 
 ?>

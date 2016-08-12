@@ -2,7 +2,13 @@
 <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 	<header class="entry-header clearfix">
 		<h1 class="entry-title">
-			<?php the_title(); ?>
+			<?php
+			$id = get_the_ID();
+			  $stripe_id = get_post_meta( $id, "adverts_stripe_id", true);
+				if($stripe_id) : echo '(SOLD) <br />'; endif;
+			the_title();
+
+			?>
 		</h1>
 		<?php mh_post_header(); ?>
 	</header>

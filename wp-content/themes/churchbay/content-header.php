@@ -10,6 +10,10 @@
 				<ul id="menu-menu-1" class="menu" style="float:right">
 				<li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="<?php echo wp_logout_url(get_permalink()); ?>">Logout &#8594;</a></li>
 			</ul>
+		<?php else: ?>
+			<ul id="menu-menu-1" class="menu" style="float:right">
+			<li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="<?php echo wp_login_url(get_permalink()); ?>">Login &#8594;</a></li>
+		</ul>
 			<?php endif;?>
 		</nav>
 	</div>

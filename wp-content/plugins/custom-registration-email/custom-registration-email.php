@@ -39,6 +39,7 @@ function custom_new_user_notification( $user_id, $deprecated = null, $notify = '
     $message .= sprintf(__('Username: %s'), $user->user_login) . "\r\n";
     $message .= sprintf(__('Password: %s'), $password ) . "\r\n\r\n";
     $message .= 'To manage your Ads please use the following address ' . $manage_url . "\r\n\r\n";
+    $message .= 'Once logged in you can change your password by clicking the "My Profile" link on the menu\r\n\r\n';
     $message .= "Thank you! \r\n\r\n";
 
     wp_mail($user->user_email, sprintf(__('[%s] Your username and password'), $blogname), nl2br($message));

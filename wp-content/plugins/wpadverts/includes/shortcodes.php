@@ -44,7 +44,7 @@ function shortcode_adverts_list( $atts ) {
         'display' => 'grid',
         'switch_views' => 0,
         'paged' => adverts_request("pg", 1),
-        'posts_per_page' => 20,
+        'posts_per_page' => 10,
     ), $atts));
 
     if( is_numeric( $redirect_to ) ) {

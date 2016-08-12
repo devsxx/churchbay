@@ -8,6 +8,10 @@
         </div>
 
         <div class="advert-post-title">
+            <?php $id = get_the_ID();
+            $stripe_id = get_post_meta( $id, "adverts_stripe_id", true);
+            if($stripe_id) : echo '<b>(SOLD)</b>'; endif;
+            ?>
             <span title="<?php esc_attr_e( get_the_title() ) ?>" class="advert-link"><?php the_title() ?></span>
             <a href="<?php the_permalink() ?>" title="<?php esc_attr_e( get_the_title() ) ?>" class="advert-link-wrap"></a>
         </div>

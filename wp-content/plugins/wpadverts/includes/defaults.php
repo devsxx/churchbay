@@ -222,18 +222,6 @@ Adverts::instance()->set("form_search", array(
                 "search_type" => "half"
             )
 
-        ),
-        array(
-            "name" => "location",
-            "type" => "adverts_field_text",
-            "order" => 10,
-            "attr" => array(
-                "placeholder" => __("Location ...", "adverts")
-            ),
-            "meta" => array(
-                "search_group" => "visible",
-                "search_type" => "half"
-            )
         )
     )
 ));

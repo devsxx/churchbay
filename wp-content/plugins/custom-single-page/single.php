@@ -3,10 +3,11 @@
     wp_enqueue_style( 'adverts-icons' );
     wp_enqueue_style( 'adverts-icons-animate' );
     wp_enqueue_script( 'adverts-frontend' );
+
+    $stripe_id = get_post_meta( $post_id, "adverts_stripe_id", true);
 ?>
 
 <?php do_action( "adverts_tpl_single_top", $post_id ) ?>
-
 <div class="adverts-single-box">
     <div class="adverts-single-author">
         <div class="adverts-single-author-avatar">
@@ -64,9 +65,18 @@
 <?php  do_action( "adverts_tpl_single_bottom", $post_id ) ?>
 </div>
 <br />
-<?php if(@$action != "preview") : ?>
-<p>
-  [stripe payment_button_label="BUY NOW FOR <?php echo adverts_price_amount( get_post_meta( $post_id, "adverts_price", true) ) ?>" amount="<?php echo adverts_price_stripe_amount( get_post_meta( $post_id, "adverts_price", true) ) ?>" ]
-</p>
-<p>Buying this item will donate <?php echo adverts_price_amount( get_post_meta( $post_id, "adverts_price", true) ) ?> to the Church</p>
-<?php endif; ?>
+<?php
+
+if($stripe_id) :
+  ?>
+<h2>SOLD</h2>
+<p>Sorry. This item has now been sold. </p>
+  <?php
+else:
+  if(@$action != "preview") : ?>
+  <p>
+    [stripe payment_button_label="BUY NOW FOR <?php echo adverts_price_amount( get_post_meta( $post_id, "adverts_price", true) ) ?>" amount="<?php echo adverts_price_stripe_amount( get_post_meta( $post_id, "adverts_price", true) ) ?>" ]
+  </p>
+  <p>Buying this item will donate <?php echo adverts_price_amount( get_post_meta( $post_id, "adverts_price", true) ) ?> to the Church</p>
+  <?php endif;
+endif; ?>

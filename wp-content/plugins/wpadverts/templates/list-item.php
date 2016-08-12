@@ -22,5 +22,4 @@
             <div class="advert-price"><?php esc_html_e( adverts_price( get_post_meta( get_the_ID(), "adverts_price", true ) ) ) ?></div>
             <?php endif; ?>
         </div>
-
     </div>

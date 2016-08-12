@@ -59,6 +59,7 @@ Adverts::instance()->set("form", array(
                 array( "name" => "is_required" ),
             )
         ),
+
         array(
             "name" => "adverts_email",
             "type" => "adverts_field_text",
@@ -77,11 +78,66 @@ Adverts::instance()->set("form", array(
             "order" => 10,
             "label" => __( "Phone Number", "adverts"),
             "validator" => array(
+                array( "name" => "is_required" ),
                 array(
                     "name" => "string_length",
                     "params" => array( "min" => 5 )
                 )
             )
+        ),
+        array(
+            "name" => "adverts_address1",
+            "type" => "adverts_field_text",
+            "order" => 10,
+            "label" => __( "Address 1", "adverts"),
+            "is_required" => true,
+            "validator" => array(
+                array( "name" => "is_required" ),
+                array(
+                    "name" => "string_length",
+                    "params" => array( "min" => 5 )
+                )
+            )
+        ),
+        array(
+            "name" => "adverts_address2",
+            "type" => "adverts_field_text",
+            "order" => 10,
+            "label" => __( "Address 2", "adverts"),
+            "is_required" => true,
+            "validator" => array(
+                array( "name" => "is_required" ),
+                array(
+                    "name" => "string_length",
+                    "params" => array( "min" => 5 )
+                )
+            )
+        ),
+        array(
+            "name" => "adverts_postcode",
+            "type" => "adverts_field_text",
+            "order" => 10,
+            "label" => __( "Postcode", "adverts"),
+            "is_required" => true,
+            "validator" => array(
+                array( "name" => "is_required" ),
+                array(
+                    "name" => "string_length",
+                    "params" => array( "min" => 4 )
+                )
+            )
+        ),
+        array(
+            "name" => "_item_stripe",
+            "type" => "adverts_field_header",
+            "order" => 20,
+            "label" => __( 'Stripe Details', 'adverts' )
+        ),
+        array(
+            "name" => "adverts_stripe_id",
+            "type" => "adverts_field_text",
+            "order" => 10,
+            "label" => __( "Stripe Transaction ID", "adverts" )
         ),
         array(
             "name" => "_item_information",
@@ -128,6 +184,9 @@ Adverts::instance()->set("form", array(
             "type" => "adverts_field_text",
             "order" => 20,
             "label" => __("Price", "adverts"),
+            "validator" => array(
+                array( "name"=> "is_required" )
+            ),
             "class" => "adverts-filter-money",
             "description" => "",
             "attr" => array(
@@ -135,13 +194,13 @@ Adverts::instance()->set("form", array(
             ),
             "filter" => array(
                 array( "name" => "money" )
-            ),
+            )
         ),
         array(
             "name" => "adverts_location",
             "type" => "adverts_field_text",
             "order" => 20,
-            "label" => __( "Location", "adverts" ),
+            "label" => __( "Pickup Location", "adverts" ),
         ),
     )
 ));

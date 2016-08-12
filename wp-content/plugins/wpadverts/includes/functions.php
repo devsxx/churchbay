@@ -1,7 +1,7 @@
 <?php
 /**
  * List of main adverts functions
- * 
+ *
  * @package     Adverts
  * @copyright   Copyright (c) 2015, Grzegorz Winiarski
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 /**
  * Returns config value
- * 
+ *
  * @global array $adverts_config
  * @global array $adverts_namespace
  * @param string $param Should be module_name.param_name
@@ -27,18 +27,18 @@ function adverts_config($param = null) {
     } else {
         list($module, $param) = explode(".", $param);
     }
-    
+
     if( !isset($adverts_namespace[$module]) ) {
         trigger_error('Incorrect module name ['.$module.']', E_USER_ERROR);
     }
-    
+
     $default = $adverts_namespace[$module]['default'];
     $option_name = $adverts_namespace[$module]['option_name'];
-    
+
     if($adverts_config === null) {
         $adverts_config = array();
     }
-    
+
     if(!isset($adverts_config[$module])) {
         $adverts_config[$module] = get_option( $option_name );
     }
@@ -55,7 +55,7 @@ function adverts_config($param = null) {
         return $adverts_config[$module];
     }
 
-    if(isset($adverts_config[$module][$param]) && 
+    if(isset($adverts_config[$module][$param]) &&
         (!empty($adverts_config[$module][$param]) || is_numeric($adverts_config[$module][$param]) || is_array($adverts_config[$module][$param]) || $adverts_config[$module][$param] === "")) {
         return $adverts_config[$module][$param];
     } else {
@@ -65,7 +65,7 @@ function adverts_config($param = null) {
 
 /**
  * Return config default values
- * 
+ *
  * @global array $adverts_namespace
  * @param string $param
  * @since 0.1
@@ -79,11 +79,11 @@ function adverts_config_default($param = null) {
     } else {
         list($module, $param) = explode(".", $param);
     }
-    
+
     if( !isset($adverts_namespace[$module]) ) {
         trigger_error('Incorrect module name ['.$module.']', E_USER_ERROR);
     }
-    
+
     if( !empty($param) ) {
         return $adverts_namespace[$module]['default'][$param];
     } else {
@@ -93,9 +93,9 @@ function adverts_config_default($param = null) {
 
 /**
  * Sets config value
- * 
+ *
  * Note this function does NOT save config in DB.
- * 
+ *
  * @global array $adverts_config
  * @global array $adverts_namespace
  * @param string $param
@@ -105,28 +105,28 @@ function adverts_config_default($param = null) {
  */
 function adverts_config_set($param, $value) {
     global $adverts_config, $adverts_namespace;
-    
+
     if(stripos($param, '.') === false) {
         $module = 'config';
     } else {
         list($module, $param) = explode(".", $param);
     }
-    
+
     if( !isset($adverts_namespace[$module]) ) {
         trigger_error('Incorrect module name ['.$module.']', E_USER_ERROR);
     }
-    
+
     $default = $adverts_namespace[$module]['default'];
     $option_name = $adverts_namespace[$module]['option_name'];
-    
+
     $adverts_config[$module][$param] = $value;
 }
 
 /**
- * Saves config in DB 
- * 
+ * Saves config in DB
+ *
  * @uses update_option()
- * 
+ *
  * @global array $adverts_config
  * @global array $adverts_namespace
  * @param string $module
@@ -135,27 +135,27 @@ function adverts_config_set($param, $value) {
  */
 function adverts_config_save( $module = null ) {
     global $adverts_config, $adverts_namespace;
-    
+
     if( $module === null ) {
         $module = "config";
     }
-    
+
     if( !isset($adverts_namespace[$module]) ) {
         trigger_error('Incorrect module name ['.$module.']', E_USER_ERROR);
     }
-    
+
     $default = $adverts_namespace[$module]['default'];
     $option_name = $adverts_namespace[$module]['option_name'];
-    
+
     update_option( $option_name, $adverts_config[$module] );
 }
 
 /**
  * Returns taxonomy meta value.
- * 
+ *
  * This is a basic implementation of terms meta data. The terms meta is being stored
  * in wp_options table.
- * 
+ *
  * @param string $taxonomy Taxonomy name (usually advert_category)
  * @param int $term_id Term ID
  * @param string $meta_key Meta field name
@@ -164,26 +164,26 @@ function adverts_config_save( $module = null ) {
  * @return mixed Saved data in DB (probably string | int or array)
  */
 function adverts_taxonomy_get($taxonomy, $term_id, $meta_key, $default = null) {
-    
+
     $option = get_option($taxonomy);
-    
+
     if(!isset($option[$term_id])) {
         return $default;
     }
-    
+
     if(!isset($option[$term_id][$meta_key])) {
         return $default;
     }
-    
+
     return $option[$term_id][$meta_key];
 }
 
 /**
  * Saves taxonomy meta value
- * 
+ *
  * This is a basic implementation of terms meta data. The terms meta is being stored
  * in wp_options table.
- * 
+ *
  * @param string $taxonomy Taxonomy name (usually advert_category)
  * @param int $term_id Term ID
  * @param string $meta_key Meta field name
@@ -192,28 +192,28 @@ function adverts_taxonomy_get($taxonomy, $term_id, $meta_key, $default = null) {
  * @return void
  */
 function adverts_taxonomy_update($taxonomy, $term_id, $meta_key, $value) {
-    
+
     $option = get_option($taxonomy);
-    
+
     if(!is_array($option)) {
         $option = array();
     }
-    
+
     if(!isset($option[$term_id])) {
         $option[$term_id] = array();
     }
-    
+
     $option[$term_id][$meta_key] = $value;
-    
+
     update_option($taxonomy, $option);
 }
 
 /**
  * Returns default temporary status for posts that are being submitted
  * via frontend.
- * 
+ *
  * Note that the status is applied to ads that user did not complete adding (yet).
- * 
+ *
  * @since 0.1
  * @return string
  */
@@ -223,10 +223,10 @@ function adverts_tmp_post_status() {
 
 /**
  * Returns value from $_POST or $_GET table by $key.
- * 
+ *
  * If the $key does not exist in neither of global tables $default value
  * is returned instead.
- * 
+ *
  * @param string $key
  * @param mixed $default
  * @since 0.1
@@ -244,9 +244,9 @@ function adverts_request($key, $default = null) {
 
 /**
  * Checks if uploaded file is an image
- * 
+ *
  * The $file variable should be an item from $_FILES array.
- * 
+ *
  * @param array $file Item from $_FILES array
  * @since 0.1
  * @return array
@@ -264,79 +264,79 @@ function adverts_file_is_image( $file ) {
     if ( 'image/' == substr($file["type"], 0, 6) || $ext && 'import' == $file["type"] && in_array($ext, $image_exts) ) {
         return $file;
     }
-    
+
     $file["error"] = __("Uploaded file is NOT an image", "adverts" );
-    
+
     return $file;
 }
 
 /**
  * Formats float as a currency
- * 
+ *
  * Functions uses currency information to format the number.
- * 
+ *
  * @param string $price Price as float
  * @since 0.1
  * @return string
  */
 function adverts_price( $price ) {
-    
+
     if( empty($price) ) {
         return null;
     }
-    
+
     $c = Adverts::instance()->get("currency");
     $number = number_format( $price, $c['decimals'], $c['char_decimal'], $c['char_thousand']);
-    
+
     if( empty($c['sign'] ) ) {
         $sign = $c['code'];
     } else {
         $sign = $c['sign'];
     }
-    
+
     if( $c['sign_type'] == 'p' ) {
         return $sign.$number;
     } else {
         return $number.$sign;
     }
-    
+
 }
 
 /**
  * Returns image that will be displayed on adverts list.
- * 
+ *
  * Function returns either the main image or first image on the list if the main
  * image was not selected.
- * 
+ *
  * @param int $id Post ID
  * @since 0.1
  * @return mixed Image URL or NULL
  */
 function adverts_get_main_image( $id ) {
-    
+
     $thumb_id = get_post_thumbnail_id( $id );
-    
+
     if($thumb_id) {
         $image = wp_get_attachment_image_src( $thumb_id, 'adverts-list' );
     } else {
         foreach(get_children(array('post_parent'=>$id, 'numberposts'=>1)) as $tmp_post) {
-            $image = wp_get_attachment_image_src( $tmp_post->ID , 'adverts-list' ); 
+            $image = wp_get_attachment_image_src( $tmp_post->ID , 'adverts-list' );
         }
     }
-    
+
     if(isset($image[0])) {
         return $image[0];
     } else {
         return null;
     }
-    
+
 }
 
 /**
  * Dynamically replace post content with Advert template.
- * 
+ *
  * This function is applied to the_content filter.
- * 
+ *
  * @global WP_Query $wp_query
  * @param string $content
  * @since 0.1
@@ -344,7 +344,7 @@ function adverts_get_main_image( $id ) {
  */
 function adverts_the_content($content) {
     global $wp_query;
-    
+
     if (is_singular('advert') && in_the_loop() ) {
         ob_start();
         $post_id = get_the_ID();
@@ -362,29 +362,29 @@ function adverts_the_content($content) {
 
 /**
  * Replaces Main Query objects.
- * 
- * When browsing by category by default WP will display list of categories 
+ *
+ * When browsing by category by default WP will display list of categories
  * (depending on the theme), we do not want that, instead we want to take control
  * over the page content. In order to do that this function removes main query
  * list of terms and replaces them with post that holds adverts list.
- * 
+ *
  * @param array $posts
  * @param WP_Query $query
  * @return array Post objects
  */
 function adverts_posts_results( $posts, $query ) {
     if( $query->is_main_query() && $query->is_tax("advert_category") ) {
-        
+
         $title = sprintf( __("Category: %s", "adverts"), $query->get_queried_object()->name );
         $post = get_post( adverts_config( 'config.ads_list_id' ) );
-        
+
         if( ! is_null( $post ) ) {
             $post->post_title = apply_filters( "adverts_category_the_title", $title);
             return array($post);
         } else {
             return array();
         }
-        
+
     } else {
         return $posts;
     }
@@ -393,13 +393,13 @@ function adverts_posts_results( $posts, $query ) {
 
 /**
  * Change Advert Category tax archive template to page template.
- * 
+ *
  * When browsing by advert category page template we do not want to use default
  * archive template, we want to use page template in order to use [adverts_list]
  * shortcode.
- * 
+ *
  * This additionally requires updating page title {@see adverts_category_the_title()}.
- * 
+ *
  * @global WP_Query $wp_query
  * @param string $template Page template path
  * @return string Page template path
@@ -409,13 +409,13 @@ function adverts_template_include( $template ) {
     if( is_tax( 'advert_category' ) ) {
         return @get_page_template();
     }
-    
+
     return $template;
 }
 
 /**
  * Remove post thumbnail for Adverts
- * 
+ *
  * @global WP_Post $post
  * @param string $html
  * @since 0.1
@@ -423,20 +423,20 @@ function adverts_template_include( $template ) {
  */
 function adverts_post_thumbnail_html($html) {
     global $post;
-    
+
     if( 'advert'==$post->post_type && in_the_loop()) {
         $html = '';
     }
-    
+
     return $html;
-    
+
 }
 
 /**
  * Check if field has errors
- * 
+ *
  * This function is mainly used in templates when generating form layout.
- * 
+ *
  * @param array $field
  * @since 0.1
  * @return boolean
@@ -451,9 +451,9 @@ function adverts_field_has_errors( $field ) {
 
 /**
  * Checks if Adverts_Form field has $validator
- * 
+ *
  * This function is mainly used in templates when generating form layout.
- * 
+ *
  * @param array $field
  * @param string $validator
  * @since 0.1
@@ -463,21 +463,21 @@ function adverts_field_has_validator( $field, $validator ) {
     if( !isset($field["validator"]) || !is_array($field["validator"]) ) {
         return false;
     }
-    
+
     foreach($field["validator"] as $v) {
         if($v["name"] == $validator) {
             return true;
         }
     }
-    
+
     return false;
 }
 
 /**
  * Returns form field rendering function
- * 
+ *
  * This function is mainly used in templates when generating form layout.
- * 
+ *
  * @param array $field
  * @since 0.1
  * @return string
@@ -491,9 +491,9 @@ function adverts_field_get_renderer( $field ) {
 
 /**
  * Registers form field
- * 
+ *
  * This function is mainly used in templates when generating form layout.
- * 
+ *
  * @param string $name
  * @param mixed $params
  * @since 0.1
@@ -502,13 +502,13 @@ function adverts_field_get_renderer( $field ) {
 function adverts_form_add_field( $name, $params ) {
     $field = Adverts::instance()->get("form_field", array());
     $field[$name] = $params;
-    
+
     Adverts::instance()->set("form_field", $field);
 }
 
 /**
  * Registers form filter
- * 
+ *
  * @param string $name
  * @param array $params
  * @since 0.1
@@ -517,13 +517,13 @@ function adverts_form_add_field( $name, $params ) {
 function adverts_form_add_filter( $name, $params ) {
     $field_filter = Adverts::instance()->get("field_filter", array());
     $field_filter[$name] = $params;
-    
+
     Adverts::instance()->set("field_filter", $field_filter);
 }
 
 /**
  * Registers form validator
- * 
+ *
  * @param string $name
  * @param array $params
  * @since 0.1
@@ -532,15 +532,15 @@ function adverts_form_add_filter( $name, $params ) {
 function adverts_form_add_validator( $name, $params ) {
     $field_validator = Adverts::instance()->get("field_validator", array());
     $field_validator[$name] = $params;
-    
+
     Adverts::instance()->set("field_validator", $field_validator);
 }
 
 /**
  * Is Required VALIDATOR
- * 
+ *
  * The function checks if $data is empty
- * 
+ *
  * @param mixed $data
  * @return string|boolean
  */
@@ -555,9 +555,9 @@ function adverts_is_required( $data ) {
 
 /**
  * Is Email VALIDATOR
- * 
+ *
  * Checks if $email is valid email address
- * 
+ *
  * @uses is_email()
  * @param string $email
  * @return boolean|string
@@ -572,22 +572,22 @@ function adverts_is_email( $email ) {
 
 /**
  * Is Email Registered VALIDATOR
- * 
+ *
  * Checks if $email is already being used by registered user. That is validator
  * checks in DB wp_users.user_email column for matching email address and returns
  * "invalid" error if found.
- * 
+ *
  * @param string $email
  * @return boolean|string
  */
 function adverts_is_email_registered( $email ) {
-    
+
     // Run this validator only from [adverts_add] shortcode with "Create account .."
     // checkbox checked.
     if( is_admin() || !adverts_request("_adverts_account") ) {
         return true;
     }
-    
+
     if( get_user_by( "email", $email ) === false ) {
         return true;
     } else {
@@ -597,15 +597,15 @@ function adverts_is_email_registered( $email ) {
 
 /**
  * Is Integer VALIDATOR
- * 
+ *
  * Checks if $value is integer 0 or greater.
- * 
+ *
  * @param string $value
  * @since 0.1
  * @return boolean|string
  */
 function adverts_is_integer( $value ) {
-    
+
     if( filter_var( $value, FILTER_VALIDATE_INT ) !== false ) {
         return true;
     } else {
@@ -615,7 +615,7 @@ function adverts_is_integer( $value ) {
 
 /**
  * String Length VALIDATOR
- * 
+ *
  * @param mixed $data
  * @param array $params Validation parameters (min and max length values)
  * @since 0.1
@@ -625,26 +625,26 @@ function adverts_string_length( $data, $params = null ) {
 
     if( isset( $params["min"] ) && strlen( $data ) < $params["min"] ) {
         return "to_short";
-    } 
-    
+    }
+
     if( isset( $params["max"] ) && strlen( $data ) > $params["max"] ) {
         return "to_long";
-    } 
-    
+    }
+
     return true;
 }
 
 /**
  * Money To Float FILTER
- * 
+ *
  * Filters currency and returns it as a float
- * 
+ *
  * @param type $data
  * @since 0.1
  * @return type
  */
 function adverts_filter_money( $data ) {
-    
+
     $cleanString = preg_replace('/([^0-9\.,])/i', '', $data);
     $onlyNumbersString = preg_replace('/([^0-9])/i', '', $data);
 
@@ -659,13 +659,13 @@ function adverts_filter_money( $data ) {
 
 /**
  * Form hidden input renderer
- * 
+ *
  * Prints (to browser) HTML for <input type="hidden" /> input
- * 
+ *
  * $field params:
  * - name: string
  * - value: mixed (scalar or array)
- * 
+ *
  * @param array $field
  * @since 0.1
  * @return void
@@ -678,18 +678,18 @@ function adverts_field_hidden( $field ) {
         "class" => isset($field["class"]) ? $field["class"] : null,
         "value" => isset($field["value"]) ? $field["value"] : "",
     ));
-    
+
     echo $html->render();
 }
 
 /**
  * Form text/paragraph renderer
- * 
+ *
  * Prints (to browser) HTML for <span></span> input
- * 
+ *
  * $field params:
  * - content: string (text to display)
- * 
+ *
  * @param array $field
  * @since 0.1
  * @return void
@@ -698,27 +698,27 @@ function adverts_field_label( $field ) {
     $html = new Adverts_Html("span", array(
         "class" => "adverts-flash adverts-flash-info"
     ), $field["content"]);
-    
+
     echo $html->render();
 }
 
 /**
  * Form input text renderer
- * 
+ *
  * Prints (to browser) HTML for <input type="text" /> input
- * 
+ *
  * $field params:
  * - name: string
  * - value: mixed (scalar or array)
  * - class: string (HTML class attribute)
  * - placeholder: string
- * 
+ *
  * @param array $field
  * @since 0.1
  * @return void
  */
 function adverts_field_text( $field ) {
-    
+
     $attr = array(
         "type" => "text",
         "name" => $field["name"],
@@ -727,7 +727,7 @@ function adverts_field_text( $field ) {
         "placeholder" => isset($field["placeholder"]) ? $field["placeholder"] : null,
         "class" => isset($field["class"]) ? $field["class"] : null
     );
-    
+
     if( isset( $field["attr"] ) && is_array( $field["attr"] ) ) {
         foreach( $field["attr"] as $key => $value ) {
             if( $value !== null && is_scalar( $value ) ) {
@@ -735,17 +735,17 @@ function adverts_field_text( $field ) {
             }
         }
     }
-    
+
     $html = new Adverts_Html( "input", $attr );
-    
+
     echo $html->render();
 }
 
 /**
  * Form dropdown renderer
- * 
+ *
  * Prints (to browser) HTML for <select>...</select> input
- * 
+ *
  * $field params:
  * - name: string
  * - value: mixed (scalar or array)
@@ -756,17 +756,17 @@ function adverts_field_text( $field ) {
  * - empty_option_text: string
  * - options_callback: mixed
  * - options: array (for example array(array("value"=>1, "text"=>"title")) )
- * 
+ *
  * @param array $field
  * @since 0.1
  * @return void
  */
 function adverts_field_select( $field ) {
-    
+
     $html = "";
     $name = $field["name"];
     $multiple = false;
-    
+
     if(isset($field["class"]) && $field["class"]) {
         $classes = $field["class"];
     } else {
@@ -778,7 +778,7 @@ function adverts_field_select( $field ) {
         $name .= "[]";
         $multiple = "multiple";
         $classes = "$classes adverts-multiselect adverts-max-choices[$max]";
-        
+
         wp_enqueue_script( 'adverts-multiselect' );
     }
 
@@ -792,7 +792,7 @@ function adverts_field_select( $field ) {
     if(isset($field["attr"])) {
         $options += $field["attr"];
     }
-    
+
     if($multiple && isset($field["empty_option_text"])) {
         $options["data-empty-option-text"] = $field["empty_option_text"];
     }
@@ -801,7 +801,7 @@ function adverts_field_select( $field ) {
         if(isset($field["empty_option_text"]) && !empty($field["empty_option_text"])) {
             $html .= '<option value="">'.esc_html($field["empty_option_text"]).'</options>';
         } else {
-            $html .= '<option value="">&nbsp;</option>'; 
+            $html .= '<option value="">&nbsp;</option>';
         }
     }
 
@@ -813,25 +813,25 @@ function adverts_field_select( $field ) {
         trigger_error("You need to specify options source for field [{$field['name']}].", E_USER_ERROR);
         $opt = array();
     }
-    
+
     foreach($opt as $k => $v) {
         $selected = null;
         $depth = null;
-        
+
         if(in_array($v["value"], (array)$field["value"])) {
             $selected = "selected";
         }
-        
+
         if(isset($v["depth"])) {
             $depth = $v["depth"];
         }
-        
+
         if(!$multiple) {
             $padding = str_repeat("&nbsp;", $depth * 2);
         } else {
             $padding = "";
         }
-        
+
         $o = new Adverts_Html("option", array(
             "value" => $v["value"],
             "data-depth" => $depth,
@@ -843,33 +843,33 @@ function adverts_field_select( $field ) {
 
     $input = new Adverts_Html("select", $options, $html);
     $input->forceLongClosing();
-    
+
     echo $input->render();
 }
 
 /**
  * Form textarea renderer
- * 
+ *
  * Prints (to browser) HTML for <textarea></textarea> input
- * 
+ *
  * $field params:
  * - value: string
  * - mode: plain-text | tinymce-mini | tinymce-full
  * - placeholder: string (for plain-text only)
  * - name: string
- * 
+ *
  * @param array $field
  * @since 0.1
  * @return void
  */
 function adverts_field_textarea( $field ) {
-    
+
     $value = '';
-    
+
     if(isset($field["value"])) {
         $value = $field["value"];
     }
-    
+
     if($field["mode"] == "plain-text") {
         $html = new Adverts_Html("textarea", array(
             "name" => $field["name"],
@@ -878,14 +878,14 @@ function adverts_field_textarea( $field ) {
             "placeholder" => isset($field["placeholder"]) ? $field["placeholder"] : null,
         ), $value);
         $html->forceLongClosing();
-        
+
         echo $html->render();
-        
+
     } elseif($field["mode"] == "tinymce-mini") {
-    
+
         $params = array(
-            "quicktags"=>false, 
-            "media_buttons"=>false, 
+            "quicktags"=>false,
+            "media_buttons"=>false,
             "teeny"=>false,
             "textarea_rows" => 8,
             'tinymce' => array(
@@ -907,23 +907,23 @@ function adverts_field_textarea( $field ) {
 
 /**
  * Form checkbox input(s) renderer
- * 
+ *
  * Prints (to browser) HTML for <input type="checkox" /> input
- * 
+ *
  * $field params:
  * - name: string
  * - value: mixed (scalar or array)
  * - options: array (for example array(array("value"=>1, "text"=>"title")) )
- * 
+ *
  * @param array $field
  * @since 0.1
  * @return void
  */
 function adverts_field_checkbox( $field ) {
-    
+
     $opts = "";
     $i = 1;
-    
+
     if( !isset( $field["value"] ) ) {
         $value = array();
     } elseif( !is_array( $field["value"] ) ) {
@@ -931,7 +931,7 @@ function adverts_field_checkbox( $field ) {
     } else {
         $value = $field["value"];
     }
-    
+
     foreach($field["options"] as $opt) {
         $checkbox = new Adverts_Html("input", array(
             "type" => "checkbox",
@@ -944,50 +944,50 @@ function adverts_field_checkbox( $field ) {
         $label = new Adverts_Html("label", array(
             "for" => $field["name"].'_'.$i
         ), $checkbox->render() . ' ' . $opt["text"]);
-        
+
         if( isset( $field["class"] ) ) {
             $class = $field["class"];
         } else {
             $class = null;
         }
-        
+
         $wrap = new Adverts_Html("div", array(
             "class" => $class
         ), $label->render() );
-        
+
         $opts .= $wrap->render();
-        
+
         $i++;
     }
-    
+
     echo Adverts_Html::build("div", array("class"=>"adverts-form-input-group"), $opts);
 }
 
 /**
  * Form radio input(s) renderer
- * 
+ *
  * Prints (to browser) HTML for <input type="radio" /> input
- * 
+ *
  * $field params:
  * - name: string
  * - value: mixed (scalar or array)
  * - options: array (for example array(array("value"=>1, "text"=>"title")) )
- * 
+ *
  * @param array $field
  * @since 0.1
  * @return void
  */
 function adverts_field_radio( $field ) {
-    
+
     $opts = "";
     $i = 1;
-    
+
     if( !isset( $field["value"] ) ) {
         $value = null;
     } else {
         $value = $field["value"];
     }
-    
+
     foreach($field["options"] as $opt) {
         $checkbox = new Adverts_Html("input", array(
             "type" => "radio",
@@ -1000,69 +1000,69 @@ function adverts_field_radio( $field ) {
         $label = new Adverts_Html("label", array(
             "for" => $field["name"].'_'.$i
         ), $checkbox->render() . ' ' . $opt["text"]);
-        
+
         $opts .= "<div>".$label->render()."</div>";
-        
+
         $i++;
     }
-    
+
     echo Adverts_Html::build("div", array("class"=>"adverts-form-input-group"), $opts);
 }
 
 /**
  * Form special field account input renderer
- * 
+ *
  * Prints (to browser) HTML for for dynamic input field, the field contents depends
  * on user state (that is if user is logged in or not).
- * 
+ *
  * @param array $field Should be an epty array
  * @since 0.1
  * @return void
  */
 function adverts_field_account( $field ) {
-    
+
     $fa = $field;
-    
+
     if(is_user_logged_in() ) {
-        
+
         $text = __('You are posting as <strong>%1$s</strong>. <br/>If you want to use a different account, please <a href="%2$s">logout</a>.', 'adverts');
         printf( '<div>'.$text.'</div>', wp_get_current_user()->display_name, wp_logout_url() );
-        
+
     } else {
-        
+
         $text = __('Create an account for me so i can manage all my ads from one place (password will be emailed to you) or <a href="%s">Sign In</a>', 'adverts');
         $text = sprintf( $text, wp_login_url( get_permalink() ) );
-        
+
         $fa["options"] = array(
             array(
-                "value" => "1", 
+                "value" => "1",
                 "text" => $text
             )
         );
-        
+
         adverts_field_checkbox($fa);
     }
-    
+
 }
 
 /**
  * Form gallery field renderer
- * 
+ *
  * Prints (to browser) HTML for for gallery field.
- * 
+ *
  * @param array $field Should be an empty array
  * @since 0.1
  * @return void
  */
 function adverts_field_gallery($field) {
     include_once ADVERTS_PATH . "includes/gallery.php";
-    
+
     wp_enqueue_script( 'adverts-gallery' );
-    
+
     $post_id = adverts_request("_post_id", adverts_request("advert_id"));
     $post = $post_id>0 ? get_post( $post_id ) : null;
-    
-    adverts_gallery_content($post, array( 
+
+    adverts_gallery_content($post, array(
         "button_class" => "adverts-button",
         "post_id_input" => "#_post_id"
     ));
@@ -1070,13 +1070,13 @@ function adverts_field_gallery($field) {
 
 /**
  * Saves single Adverts_Form value in post meta table.
- * 
+ *
  * This function is used on scalar form elements, that is elements that return only
  * one value (<input type="text" />, <textarea />, <input type="radio" />)
- * 
+ *
  * @uses delete_post_meta()
  * @uses add_post_meta()
- * 
+ *
  * @since 1.0
  * @access public
  * @param int $post_id Advert ID
@@ -1094,13 +1094,13 @@ function adverts_save_single( $post_id, $key, $value ) {
 
 /**
  * Saves single Adverts_Form value in post meta table.
- * 
+ *
  * This function is used on scalar form elements, that is elements that return
  * array of values (<input type="checkbox" />, <select />)
- * 
+ *
  * @uses delete_post_meta()
  * @uses add_post_meta()
- * 
+ *
  * @since 1.0
  * @access public
  * @param int $post_id Advert ID
@@ -1123,19 +1123,19 @@ function adverts_save_multi( $post_id, $key, $value ) {
     }
     foreach( $to_insert as $meta_value ) {
         add_post_meta( $post_id, $key, $meta_value );
-    } 
+    }
 }
 
 /**
  * Binding function for scalar values
- * 
+ *
  * This function is used in Adverts_Form class filter and set values
  * for form fields which are using this function for binding.
- * 
+ *
  * @see Adverts_Form
  * @see adverts_form_add_field()
  * @see includes/default.php
- * 
+ *
  * @since 1.0
  * @access public
  * @param array $field Information about form field
@@ -1143,7 +1143,7 @@ function adverts_save_multi( $post_id, $key, $value ) {
  * @return string Filtered value
  */
 function adverts_bind_single($field, $value) {
-    
+
     $filters = Adverts::instance()->get("field_filter", array());
 
     if( isset( $field["filter"] ) ) {
@@ -1154,21 +1154,21 @@ function adverts_bind_single($field, $value) {
             } // end if;
         } // end foreach;
     } // end if;
-    
+
     return $value;
 }
 
 /**
  * Binding function for array values
- * 
+ *
  * This function is used in Adverts_Form class filter and set values
- * for form fields which are using this function for binding (by default 
+ * for form fields which are using this function for binding (by default
  * <select> and <input type="checkbox" /> are using it).
- * 
+ *
  * @see Adverts_Form
  * @see adverts_form_add_field()
  * @see includes/default.php
- * 
+ *
  * @since 1.0
  * @access public
  * @param array $field Information about form field
@@ -1176,22 +1176,22 @@ function adverts_bind_single($field, $value) {
  * @return mixed
  */
 function adverts_bind_multi($field, $value) {
-    
+
     $filters = Adverts::instance()->get("field_filter", array());
     $key = $field["name"];
-    
+
     if( $value === NULL ) {
         $value = array();
     } elseif( ! is_array( $value ) ) {
         $value = array( $value );
     }
-    
+
     $result = array();
-    
+
     foreach( $value as $v ) {
         $result[] = adverts_bind_single( $field, $v );
     }
-    
+
     if( !isset( $field["max_choices"] ) || $field["max_choices"] == 1) {
         if( isset( $result[0] ) ) {
             return $result[0];
@@ -1205,9 +1205,9 @@ function adverts_bind_multi($field, $value) {
 
 /**
  * Display flash messages in wp-admin
- * 
+ *
  * This function is being used mainly in Adverts wp-admin template files
- * 
+ *
  * @since 0.1
  * @return void
  */
@@ -1234,20 +1234,20 @@ function adverts_admin_flash() {
 
 /**
  * Displays JavaScript based redirect code
- * 
+ *
  * This function is being used in wp-admin when some content is already displayed
  * in the browser, but Adverts needs to redirect user.
- * 
+ *
  * @param string $url
  * @since 0.1
- * @return void 
+ * @return void
  */
 function adverts_admin_js_redirect( $url ) {
     ?>
 
     <h3><?php _e("Redirecting", "adverts") ?></h3>
     <p><?php printf(__('Your are being redirected to Edit page. <a href="%s">Click here</a> if it is taking to long. ', 'adverts'), $url) ?></p>
-    
+
     <script type="text/javascript">
         window.location.href = "<?php echo ($url) ?>"
     </script>
@@ -1257,22 +1257,22 @@ function adverts_admin_js_redirect( $url ) {
 
 /**
  * Layout for forms generated by Adverts in wp-admin panel.
- * 
+ *
  * @param Adverts_Form $form
  * @param array $options
  * @since 0.1
  * @return void
  */
 function adverts_form_layout_config(Adverts_Form $form, $options = array()) {
-   
+
     $a = array();
-    
+
 ?>
 
     <?php foreach($form->get_fields( array( "type" => array( "adverts_field_hidden" ) ) ) as $field): ?>
     <?php call_user_func( adverts_field_get_renderer($field), $field) ?>
     <?php endforeach; ?>
-    
+
     <?php foreach($form->get_fields( $options ) as $field): ?>
         <?php if($field["type"] == "adverts_field_header"): ?>
         <tr valign="top">
@@ -1293,15 +1293,15 @@ function adverts_form_layout_config(Adverts_Form $form, $options = array()) {
                 </label>
             </th>
             <td class="">
-                
+
                 <?php
                     switch($field["type"]) {
-                        case "adverts_field_text": 
+                        case "adverts_field_text":
                             $field["class"] = (isset($field["class"]) ? $field["class"] : '') . ' regular-text';
                             break;
                     }
                 ?>
-                
+
                 <?php call_user_func( adverts_field_get_renderer($field), $field) ?>
 
                 <?php if(isset($field['hint']) && !empty($field['hint'])): ?>
@@ -1347,16 +1347,16 @@ function adverts_walk_category_dropdown_tree() {
 
 /**
  * Returns options for category field
- * 
- * This function is being used when generating category field in the (for example 
+ *
+ * This function is being used when generating category field in the (for example
  * "post ad" form).
- * 
+ *
  * @uses adverts_walk_category_dropdown_tree()
  * @since 0.1
  * @return array
  */
 function adverts_taxonomies() {
-    
+
     $args = array(
         'taxonomy'     => 'advert_category',
         'hierarchical' => true,
@@ -1366,26 +1366,26 @@ function adverts_taxonomies() {
         'depth'         => 0,
         'selected' => 0,
         'show_count' => 0,
-        
+
     );
 
     include_once ADVERTS_PATH . '/includes/class-walker-category-options.php';
-    
+
     $walker = new Adverts_Walker_Category_Options;
     $params = array(
         get_terms( 'advert_category', $args ),
         0,
         $args
     );
-    
+
     return call_user_func_array(array( &$walker, 'walk' ), $params );
 }
 
 /**
  * Returns current user IP address
- * 
+ *
  * Based on Easy Digital Downloads get ip function.
- * 
+ *
  * @since 1.0
  * @return string
  */
@@ -1404,16 +1404,16 @@ function adverts_get_ip() {
 
 /**
  * Returns currency data
- * 
+ *
  * It can return either all currencies (if $currency = null), all information
  * about one currenct (if $get = null).
- * 
+ *
  * @param mixed $currency Either NULL or string
  * @param string $get Either 'code', 'sign', 'label' or NULL
  * @return array
  */
 function adverts_currency_list( $currency = null, $get = null ) {
-    
+
     $list = apply_filters("adverts_currency_list", array(
         array("code"=>"USD", "sign"=>"$", "label"=>__("US Dollars", "adverts")),
         array("code"=>"EUR", "sign"=>"€", "label"=>__("Euros", "adverts")),
@@ -1444,37 +1444,37 @@ function adverts_currency_list( $currency = null, $get = null ) {
         array("code"=>"RUB", "sign"=>"", "label"=>__("Russian Rubles", "adverts")),
         array("code"=>"ZAR", "sign"=>"R", "label"=>__("South African Rand", "adverts")),
     ));
-    
+
     if( $currency == null ) {
         return $list;
     }
-    
+
     $currency_data = null;
-    
+
     foreach($list as $curr) {
         if($curr["code"] == $currency) {
             $currency_data = $curr;
             break;
         }
     }
-    
+
     if( $currency_data === null ) {
         trigger_error("Currency [$currency] does not exist.");
         return null;
     }
-    
+
     if($get && isset($currency_data[$get])) {
         return $currency_data[$get];
     } else {
         return $currency_data;
     }
-} 
+}
 
 /**
  * Returns path to the provided $term
- * 
+ *
  * The path consists of parent/child term text names only.
- * 
+ *
  * @param stdClass $term WP Term object
  * @param string $taxonomy Taxonomy name
  * @since 1.0.5
@@ -1486,21 +1486,21 @@ function advert_term_path( $term, $taxonomy = null ) {
     if( $taxonomy === null ) {
         $taxonomy = $term->taxonomy;
     }
-    
+
     do {
         $cpath[$term->term_id] = $term->name;
         $term = get_term( $term->parent, $taxonomy );
     } while( !$term instanceof WP_Error );
-    
+
     return array_reverse( $cpath, true );
 }
 
 /**
  * Returns path to the provided $term
- * 
+ *
  * The path consists of parent/child term text names only.
  * @uses advert_term_path
- * 
+ *
  * @param stdClass $term WP Term object
  * @since 0.2
  * @updated 1.0.5
@@ -1512,7 +1512,7 @@ function advert_category_path( $term ) {
 
 /**
  * Returns number of categories in this categor and all sub categories.
- * 
+ *
  * @param stdClass $term Term object
  * @since 0.3
  * @return int Number of posts in this cantegory and sub-categories
@@ -1533,11 +1533,11 @@ function adverts_category_post_count( $term ) {
 
 /**
  * Fixes random changing font size.
- * 
+ *
  * This is a fix for a problem described here https://www.wp-code.com/wordpress-snippets/how-to-stop-chrome-using-a-large-font-size-after-refreshing/
- * by default it is applied to Twentytwelve theme only but you can apply it to your theme 
+ * by default it is applied to Twentytwelve theme only but you can apply it to your theme
  * if you need to by adding following code add_action('wp_head', 'adverts_css_rem_fix');
- * 
+ *
  * @since 0.2
  * @return void
  */
@@ -1549,10 +1549,10 @@ function adverts_css_rem_fix() {
 
 /**
  * Disables Adverts archive page.
- * 
+ *
  * We do not want to disaply adverts archive page because it is not possible
  * to control displayed conent there, instead we redirect users to default ads list page
- * 
+ *
  * @access public
  * @since 1.0
  * @return void
@@ -1566,15 +1566,15 @@ function adverts_disable_default_archive() {
 
 /**
  * Checks if plugin is uploaded to wp-content/plugins directory.
- * 
+ *
  * This functions checks if plugin is uploaded to plugins directory, note that
  * as a $basename you need to pass plugin-dir/plugin-file-name.php
- * 
+ *
  * @access public
  * @since 1.0
  * @param string $basename Plugin basename
  * @return boolean
- * 
+ *
  */
 function adverts_plugin_uploaded( $basename ) {
     return is_file( dirname( ADVERTS_PATH ) . "/" . ltrim( $basename, "/") );
@@ -1582,13 +1582,13 @@ function adverts_plugin_uploaded( $basename ) {
 
 /**
  * Creates a user based on data in Ad
- * 
+ *
  * This functions is used to automatically create user, if when posting an Ad
  * (using [adverts_add] shortcode) user selected that he wants to have an account created.
- * 
+ *
  * @uses adverts_create_user_from_post_id filter to register user
  * @see shortcode_adverts_add()
- * 
+ *
  * @access public
  * @since 1.0
  * @param int $ID Ad Post ID
@@ -1596,35 +1596,40 @@ function adverts_plugin_uploaded( $basename ) {
  * @return int Created user ID
  */
 function adverts_create_user_from_post_id( $ID, $update_post = false ) {
-    
+
     $email_address = get_post_meta( $ID, "adverts_email", true );
     $full_name = get_post_meta( $ID, "adverts_person", true );
+    $address1 = get_post_meta( $ID, "adverts_address1", true );
+    $address2 = get_post_meta( $ID, "adverts_address2", true );
+    $address3 = get_post_meta( $ID, "adverts_address3", true );
+
+
     $user_id = null;
-    
+
     if( null == username_exists( $email_address ) ) {
 
         $user_id = apply_filters( "adverts_create_user_from_post_id", null, $ID );
-        
+
         if($update_post && is_int( $user_id ) ) {
-            wp_update_post( array( 
+            wp_update_post( array(
                 "ID" => $ID,
                 "post_author" => $user_id
             ) );
         }
 
     } // end if
-    
+
     return $user_id;
 }
 
 /**
  * Registers user using WordPress registration
- * 
+ *
  * User data for registration (email, name, etc.) is derived from posted Advert.
  * The user is registered using wp_create_user() function
- * 
+ *
  * @see wp_create_user()
- * 
+ *
  * @access protected
  * @since 1.0
  * @param int $user_id      Integer if user was already registered or NULL
@@ -1632,17 +1637,22 @@ function adverts_create_user_from_post_id( $ID, $update_post = false ) {
  * @return int              Newly created user ID
  */
 function _adverts_create_user_from_post_id( $user_id, $post_id ) {
-    
+
     if( $user_id !== null ) {
         // some other filter already registered user, skip registration then
         return $user_id;
     }
-    
+
     $email_address = get_post_meta( $post_id, "adverts_email", true );
     $full_name = get_post_meta( $post_id, "adverts_person", true );
+    $address1 = get_post_meta( $post_id, "adverts_address1", true );
+    $address2 = get_post_meta( $post_id, "adverts_address2", true );
+    $postcode = get_post_meta( $post_id, "adverts_postcode", true );
+    $phone = get_post_meta( $post_id, "adverts_phone", true );
+
     // Generate the password and create the user
     $password = wp_generate_password( 12, false );
-    $user_id = wp_create_user( $email_address, $password, $email_address );
+    $user_id = wp_create_user( $email_address, $password, $email_address);
 
     // Set the nickname
     wp_update_user(
@@ -1653,54 +1663,58 @@ function _adverts_create_user_from_post_id( $user_id, $post_id ) {
         )
     );
 
+    update_user_meta( $user_id,'address1', $address1 );
+    update_user_meta( $user_id,'address2', $address2 );
+    update_user_meta( $user_id,'postcode', $postcode );
+
     // Set the role
     $user = new WP_User( $user_id );
     $user->set_role( 'subscriber' );
 
     // Email the user
     do_action( "adverts_new_user_notification", $user_id, null, "both", $password );
-    
+
     return $user_id;
 }
 
 /**
  * Appends classes to single advert on ads list.
- * 
+ *
  * This function is used in wpadverts/templates/list-item.php file.
- * 
+ *
  * @param string $classes List of CSS classes
  * @param integer $post_id WP_Post ID
  * @return string Updated list of CSS classes
  */
 function adverts_css_classes( $classes, $post_id ) {
 
-    $post = get_post( $post_id );    
+    $post = get_post( $post_id );
     $classes = trim($classes) . " " . "advert-id-" . $post_id;
-    
+
     return apply_filters( "adverts_css_classes", $classes, $post_id );
 }
 
 /**
  * Renders slider on Ad details page.
- * 
+ *
  * This function is called by adverts_tpl_single_top action in
  * wpadverts/templates/single.php
- * 
+ *
  * @see adverts_tpl_single_top action
- * 
+ *
  * @since 1.0.7
  * @param int $post_id Post ID
  * @return void
  */
 function adverts_single_rslides( $post_id ) {
-    
+
     $images = get_children(array('post_parent'=>$post_id));
     wp_enqueue_script( 'responsive-slides' );
-    
+
     if( empty( $images ) ) {
         return;
     }
-    
+
     ?>
     <div class="rslides_container">
         <ul id="slides1" class="rslides rslides1">
@@ -1720,18 +1734,18 @@ function adverts_single_rslides( $post_id ) {
                 <?php endif; ?>
             <?php endforeach; ?>
         </ul>
-    </div>   
-    <?php    
+    </div>
+    <?php
 }
 
 /**
  * Renders contact box on Ad details page
- * 
+ *
  * This function is called by adverts_tpl_single_bottom action in
  * wpadverts/templates/single.php
- * 
+ *
  * @see adverts_tpl_single_bottom action
- * 
+ *
  * @since 1.0.7
  * @access public
  * @param int $post_id Post ID
@@ -1763,12 +1777,12 @@ function adverts_single_contact_information( $post_id ) {
 
 /**
  * Adds 'reveal_hidden' input to search form.
- * 
- * This function add <input type="hidden" name="reveal_hidden" value="1" /> 
- * to search form if $_GET["reveal_hidden"] == 1. 
- * 
+ *
+ * This function add <input type="hidden" name="reveal_hidden" value="1" />
+ * to search form if $_GET["reveal_hidden"] == 1.
+ *
  * Function is being called by [adverts_list] shortcode.
- * 
+ *
  * @since 1.0.7
  * @access public
  * @param array $form Form scheme
@@ -1778,25 +1792,25 @@ function adverts_form_search_reveal_hidden( $form ) {
     if( $form['name'] != 'search' ) {
         return $form;
     }
-    
+
     $form["field"][] = array(
         "name" => "reveal_hidden",
         "type" => "adverts_field_hidden",
         "order" => 20,
         "value" => 1
     );
-    
+
     return $form;
 }
 
 /**
  * Adds 'display' input to search form.
- * 
- * This function add <input type="hidden" name="display" value="1" /> 
- * to search form if $_GET["display"] == 1. 
- * 
+ *
+ * This function add <input type="hidden" name="display" value="1" />
+ * to search form if $_GET["display"] == 1.
+ *
  * Function is being called by [adverts_list] shortcode.
- * 
+ *
  * @since 1.0.8
  * @access public
  * @param array $form Form scheme
@@ -1806,23 +1820,23 @@ function adverts_form_search_display_hidden( $form ) {
     if( $form['name'] != 'search' ) {
         return $form;
     }
-    
+
     $form["field"][] = array(
         "name" => "display",
         "type" => "adverts_field_hidden",
         "order" => 20,
         "value" => adverts_request( "display" )
     );
-    
+
     return $form;
 }
 
 /**
  * Remove "account" field from Advers Add form
- * 
+ *
  * This function is being called in [adverts_manage] shortcode, to hide the
  * account field when editing an Ad.
- * 
+ *
  * @since 1.0
  * @access public
  * @param array $form   Form Scheme
@@ -1838,6 +1852,6 @@ function adverts_remove_account_field( $form ) {
             unset( $form["field"][$key] );
         }
     }
-    
+
     return $form;
 }

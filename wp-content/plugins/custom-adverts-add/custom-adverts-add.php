@@ -22,7 +22,21 @@ function my_adverts_form_load( $form ) {
         "options" => array(
             array("value"=>"1", "text"=>"The new Church roof"),
             array("value"=>"2", "text"=>"Church Flowers"),
-            array("value"=>"2", "text"=>"Generic Church upkeep")
+            array("value"=>"3", "text"=>"Generic Church upkeep")
+        )
+    );
+    $form["field"][] = array(
+        "name" => "my_custom_terms",
+        "type" => "adverts_field_checkbox",
+        "order" => 25,
+        "label" => "Terms and Conditions",
+        "is_required" => true,
+        "validator" =>  array(
+          array( "name" => "is_required" )
+        ),
+        "max_choices" => 1,
+        "options" => array(
+            array("value"=>"1", "text"=>"I Agree to the <a href='/terms-and-conditions/' target='_blank'>Terms and Conditions</a>")
         )
     );
     return $form;

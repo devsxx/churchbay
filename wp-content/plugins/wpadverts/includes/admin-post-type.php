@@ -1,7 +1,7 @@
 <?php
 /**
  * Admin Post Types
- * 
+ *
  * List of functions executed when 'adverts' post type is loaded in wp-admin
  *
  * @package     Adverts
@@ -16,28 +16,28 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 /**
  * Save additional data for adverts custom post type
- * 
- * @uses Adverts_Form 
- * 
+ *
+ * @uses Adverts_Form
+ *
  * @param int $ID Post ID
  * @param WP_Post $post
  * @since 0.1
  * @return null
  */
 function adverts_save_post($ID = false, $post = false) {
-    
+
     global $pagenow;
-    
+
     if ( !in_array($pagenow, array("post.php", "post-new.php") ) ) {
         return $ID;
     }
-    
+
     $nonce = 'product_price_box_content_nonce';
-    
+
     if ( !isset( $_POST[$nonce] ) || !wp_verify_nonce( $_POST[$nonce], basename( __FILE__ ) ) ) {
         //return $ID;
     }
-    
+
     /* Get the post type object. */
     $post_type = get_post_type_object( $post->post_type );
 
@@ -45,23 +45,23 @@ function adverts_save_post($ID = false, $post = false) {
     if ( !current_user_can( $post_type->cap->edit_post, $ID ) ) {
         return $ID;
     }
-    
+
     if ( !$post->post_type == 'advert' ) {
         return $ID;
     }
-    
+
     if ( defined( "DOING_AJAX" ) && DOING_AJAX ) {
         return $ID;
     }
- 
+
     /* Save expiration date in DB */
-    if( !empty( $_POST ) ) { 
+    if( !empty( $_POST ) ) {
         $current_exp_date = get_post_meta( $ID, "_expiration_date", true );
         $edit_date = empty( $current_exp_date );
     } else {
         $edit_date = false;
     }
-    
+
     foreach ( array('aa', 'mm', 'jj', 'hh', 'mn') as $timeunit ) {
         if ( !empty( $_POST['adverts_hidden_' . $timeunit] ) && $_POST['adverts_hidden_' . $timeunit] != $_POST['adverts_' . $timeunit] ) {
             $edit_date = 1;
@@ -95,33 +95,33 @@ function adverts_save_post($ID = false, $post = false) {
         //$exp_date_gmt = get_gmt_from_date( $exp_date );
         //
         // Save expiration date in DB
-        update_post_meta( $ID, "_expiration_date", strtotime( $exp_date ) ); 
-        
+        update_post_meta( $ID, "_expiration_date", strtotime( $exp_date ) );
+
     }
-    
+
     $form = new Adverts_Form();
     $form->load(Adverts::instance()->get("form"));
     $form->bind( stripslashes_deep( $_POST ) );
-    
+
     foreach($form->get_fields() as $field) {
         if(isset($field["value"])) {
-            
+
             $meta_old = get_post_meta( $ID, $field["name"] );
-            
+
             if( $field["value"] == '' ) {
                 delete_post_meta( $ID, $field["name"] );
             } else {
                 update_post_meta( $ID, $field["name"], $field["value"] );
             }
         }
-        
+
     }
-    
+
 }
 
 /**
  * Makes sure that all required data is entered before publshing Advert.
- * 
+ *
  * @global wpdb $wpdb
  * @param int $ID
  * @param WP_Post $post
@@ -129,18 +129,18 @@ function adverts_save_post($ID = false, $post = false) {
  * @return type
  */
 function adverts_save_post_validator( $ID, $post ) {
-    
+
     global $pagenow;
-    
+
     if ( !in_array($pagenow, array("post.php", "post-new.php") ) ) {
         return $ID;
     }
-    
+
     // Don't do on autosave or when new posts are first created
     if ( ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) || $post->post_status == 'auto-draft' ) {
         return $ID;
     }
-    
+
     // Abort if not Adverts custom type
     if ( $post->post_type != 'advert' ){
         return $ID;
@@ -150,28 +150,28 @@ function adverts_save_post_validator( $ID, $post ) {
     $form = new Adverts_Form();
     $form->load(Adverts::instance()->get("form"));
     $form->bind( stripslashes_deep( $_POST ) );
-    
+
     $valid = $form->validate();
-    
+
     // on attempting to publish - check for completion and intervene if necessary
     if ( ( isset( $_POST['publish'] ) || isset( $_POST['save'] ) ) && $_POST['post_status'] == 'publish' ) {
         //  don't allow publishing while any of these are incomplete
-        
+
         if ( !$valid ) {
             global $wpdb;
             $wpdb->update( $wpdb->posts, array( 'post_status' => 'draft' ), array( 'ID' => $ID ) );
-            
+
             // filter the query URL to change the published message
             add_filter( 'redirect_post_location', create_function( '$location','return add_query_arg("message", "21", $location);' ) );
-        } 
+        }
     }
 }
 
 /**
  * Register new error message
- * 
+ *
  * @see post_updated_messages filter
- * 
+ *
  * @param array $messages
  * @since 0.1
  * @return array
@@ -185,9 +185,9 @@ function adverts_post_updated_messages( $messages ) {
 
 /**
  * Render adverts post type inline scripts
- * 
+ *
  * @see admin_head action
- * 
+ *
  * @global string $post_type
  * @global WP_Post $post
  * @since 0.1
@@ -197,24 +197,24 @@ function adverts_admin_head() {
     global $post_type, $post;
 
     // Make sure this is Adverts post type
-    if (is_object($post) && ( ( isset($_GET['post_type']) && $_GET['post_type'] == 'advert') || ($post_type == 'advert') ) ):  
+    if (is_object($post) && ( ( isset($_GET['post_type']) && $_GET['post_type'] == 'advert') || ($post_type == 'advert') ) ):
     ?>
 
     <script language="Javascript">
         var ADVERTS_POST_STATUS = '<?php echo esc_js($post->post_status) ?>';
     </script>
-    <?php 
-    
-    endif; 
+    <?php
+
+    endif;
 }
 
 /**
  * Renders expiration date inputs
- * 
+ *
  * This function is beign used only by adverts_expiry_meta_box() function.
- * 
+ *
  * @see adverts_expiry_meta_box()
- * 
+ *
  * @global WP_Locale $wp_locale
  * @param string $post_date Date in Y-m-d H:i:s format
  * @param int $tab_index
@@ -222,7 +222,7 @@ function adverts_admin_head() {
  */
 function adverts_touch_time( $post_date, $tab_index = 0, $never_expires = false ) {
     global $wp_locale;
-    
+
     $edit = true;
 
     $tab_index_attribute = '';
@@ -269,18 +269,18 @@ function adverts_touch_time( $post_date, $tab_index = 0, $never_expires = false 
             <label for="never_expires"><?php _e('Never Expires', 'adverts') ?></label>
         </div>
     </div>
-    
+
     <input type="hidden" id="ss" name="ss" value="' . $ss . '" />
 
     <?php
-    
+
     echo "\n\n";
     foreach ( array('mm', 'jj', 'aa', 'hh', 'mn') as $timeunit ) {
             echo '<input type="hidden" id="adverts_hidden_' . $timeunit . '" name="adverts_hidden_' . $timeunit . '" value="' . $$timeunit . '" />' . "\n";
             $cur_timeunit = 'cur_' . $timeunit;
             echo '<input type="hidden" id="adverts_' . $cur_timeunit . '" name="adverts_' . $cur_timeunit . '" value="' . $$cur_timeunit . '" />' . "\n";
     }
-        
+
     ?>
 
     <p>
@@ -292,20 +292,20 @@ function adverts_touch_time( $post_date, $tab_index = 0, $never_expires = false 
 
 /**
  * Adds Expiry date to 'Publish' meta box
- * 
+ *
  * @see post_submitbox_misc_actions action
- * 
+ *
  * @param WP_Post $post
  * @global string $pagenow
  */
 function adverts_expiry_meta_box() {
     global $post, $pagenow;
-    
+
     // Do this for adverts only.
     if($post->post_type != 'advert') {
         return;
     }
-    
+
     $datef = __( 'M j, Y @ G:i' );
     $meta = get_post_meta( $post->ID, '_expiration_date', true);
 
@@ -329,7 +329,7 @@ function adverts_expiry_meta_box() {
         $touch_time = date( "Y-m-d H:i:s", $expiry );
         $never_expires = false;
     }
-    
+
     // Check if date is in the past or in the future and set correct label based on this.
     if( strtotime( date_i18n( "Y-m-d H:i:s" ) ) > $expiry ) {
         $stamp = __( "Expired: <b>%s</b>", "adverts");
@@ -339,7 +339,7 @@ function adverts_expiry_meta_box() {
 
     /* @todo: in a future select who can publish */
     $can_publish = true;
-    
+
     // render expiration date section
     if ( $can_publish ):  ?>
     <div class="misc-pub-section curtime misc-pub-curtime">
@@ -348,40 +348,40 @@ function adverts_expiry_meta_box() {
         <a href="#edit_timestamp_expire" class="edit-timestamp hide-if-no-js"><span aria-hidden="true"><?php _e( 'Edit' ); ?></span> <span class="screen-reader-text"><?php _e( 'Edit date and time' ); ?></span></a>
         <div id="timestamp-expire-div" class="hide-if-js"><?php adverts_touch_time( $touch_time, 2, $never_expires); ?></div>
     </div><?php // /misc-pub-section ?>
-    <?php endif; 
+    <?php endif;
 }
 
 /**
  * Adds meta box with additional advert information
- * 
+ *
  * @uses Adverts
  * @uses Adverts_Form
  * @see add_meta_box()
- * 
+ *
  * @param WP_Post $post
  * @since 0.1
  * @return void
  */
 function adverts_data_box_content( $post ) {
   wp_nonce_field( plugin_basename( __FILE__ ), 'product_price_box_content_nonce' );
-  
+
   $exclude = array("_adverts_account", "advert_category", "post_title", "gallery", "post_content");
-  
+
   // Load form data
   $form = new Adverts_Form();
   $form->load(Adverts::instance()->get("form"));
-  
+
   // Get list of fields from post meta table
   $bind = array();
   foreach( $form->get_fields( array( "exclude"=>$exclude ) ) as $f ) {
       $bind[$f["name"]] = get_post_meta( $post->ID, $f["name"], true );
   }
-  
+
   // Bind data
   $form->bind( $bind );
-  
 
-  // Validate if message 21 will be displayed, that is if form already failed 
+
+  // Validate if message 21 will be displayed, that is if form already failed
   // validation in adverts_save_post_validator() function
   if( isset($_GET['message']) && $_GET['message'] == 21 ) {
       $form->validate();
@@ -391,22 +391,22 @@ function adverts_data_box_content( $post ) {
 
     <style type="text/css">
         .adverts-data-table th.adverts-data-header {
-            font-size:1.4em; 
-            font-weight: normal; 
-            font-variant: small-caps; 
+            font-size:1.4em;
+            font-weight: normal;
+            font-variant: small-caps;
             padding: 20px 10px 0px 0px
         }
-        
+
         .adverts-data-table input[type="text"],
         .adverts-data-table textarea {
             width: 99%;
         }
-        .adverts-data-table td,  
+        .adverts-data-table td,
         .adverts-data-table th {
             border-bottom: 2px solid white;
         }
     </style>
-    
+
     <table class="form-table adverts-data-table">
 	<tbody>
         <?php foreach($form->get_fields( array( "exclude"=>$exclude ) ) as $field): ?>
@@ -436,18 +436,18 @@ function adverts_data_box_content( $post ) {
                 </td>
             <?php endif; ?>
             </tr>
-        <?php endforeach; ?>			
+        <?php endforeach; ?>
         </tbody>
     </table>
-  
+
   <?php
 }
 
 /**
  * Display 'Expired' state on Classifieds list
- * 
+ *
  * This functions shows Expired state in the wp-admin / Classifieds panel
- * 
+ *
  * @global WP_Post $post
  * @param array $states
  * @return array
@@ -465,9 +465,9 @@ function adverts_display_expired_state( $states ) {
 
 /**
  * Allows to set post author to null
- * 
+ *
  * @see wp_insert_post_data filter
- * 
+ *
  * @param array $data
  * @since 0.1
  * @return array
@@ -476,18 +476,18 @@ function adverts_insert_post_data($data) {
     if(isset($_POST["post_author"]) && $_POST["post_author"] == "0+") {
         $data["post_author"] = 0;
     }
-    
+
     return $data;
 }
 
 /**
  * Register meta box with Additional Information (price, location, etc.)
- * 
+ *
  * @since 0.1
  * @return void
  */
 function adverts_data_box() {
-    add_meta_box( 
+    add_meta_box(
         'adverts_data_box',
         __( 'Additional Information', 'adverts' ),
         'adverts_data_box_content',
@@ -495,16 +495,16 @@ function adverts_data_box() {
         'normal',
         'low'
     );
-}   
+}
 
 /**
  * Register gallery meta box
- * 
+ *
  * @since 0.1
  * @return void
  */
 function adverts_box_gallery() {
-    add_meta_box( 
+    add_meta_box(
         'adverts_gallery',
         __( 'Gallery', 'adverts' ),
         'adverts_gallery_content',
@@ -516,9 +516,9 @@ function adverts_box_gallery() {
 
 /**
  * Set column headers on Adverts list in wp-admin / Classifieds panel
- * 
+ *
  * @see manage_edit-advert_columns filter
- * 
+ *
  * @param type $columns
  * @return type
  */
@@ -528,6 +528,7 @@ function adverts_edit_columns( $columns ) {
         'cb' => '<input type="checkbox" />',
         'title' => __( 'Title' ),
         'price' => __( 'Price' ),
+        'stripe_id' => __( 'Stripe Payment ID' ),
         'author' => __( 'Author' ),
         'expires' => __( 'Expires', 'adverts' ),
         'date' => __( 'Date' )
@@ -538,9 +539,9 @@ function adverts_edit_columns( $columns ) {
 
 /**
  * Insert custom columns on Adverts list in wp-admin / Classifieds panel.
- * 
+ *
  * @see manage_advert_posts_custom_column action
- * 
+ *
  * @global WP_Post $post
  * @global type $mode
  * @param string $column
@@ -554,14 +555,14 @@ function adverts_manage_post_columns( $column, $post_id ) {
         case 'expires' :
             // Insert expires column
             $expires = get_post_meta( $post_id, '_expiration_date', true );
-            
+
             // If expiry date not in DB, then ad never expires
             if( !$expires ) {
                 echo __( 'Never', 'adverts' );
                 break;
             }
 
-            
+
             $t_time = date_i18n( __( 'Y/m/d g:i:s A' ), $expires );
             /* @var string $t_time Post creation date */
             $m_time = date_i18n( 'Y-m-d H:i:s', $expires );
@@ -571,18 +572,19 @@ function adverts_manage_post_columns( $column, $post_id ) {
 
             $time_diff = current_time( 'timestamp' ) - $time;
             $h_time = mysql2date( __( 'Y/m/d' ), $m_time );
-            
+
             if ( $time_diff < 0 ) {
                 $h_text = __( 'in %s', 'adverts' );
             } else {
                 $h_text = __( '%s ago' );
             }
-            
+
             echo '<abbr title="' . $t_time . '">' . apply_filters( 'post_date_column_time', $h_time, $post, $column, $mode ) . '</abbr>';
             echo '<br />';
             echo sprintf( $h_text , human_time_diff( $time, current_time( 'timestamp' ) ));
-            
+
             break;
+
         case 'price' :
 
             /* Get the post meta. */
@@ -597,6 +599,18 @@ function adverts_manage_post_columns( $column, $post_id ) {
 
             break;
 
+        case 'stripe_id' :
+
+            /* Get the post meta. */
+            $stripe_id = get_post_meta( $post_id, 'adverts_stripe_id', true );
+
+            /* If empty then price is not set. */
+            if ( !empty( $stripe_id ) ) {
+                echo $stripe_id;
+            }
+
+            break;
+
 
         /* Just break out of the switch statement for everything else. */
         default :
@@ -606,9 +620,9 @@ function adverts_manage_post_columns( $column, $post_id ) {
 
 /**
  * Defines Adverts sortable columns
- * 
+ *
  * @see manage_edit-advert_sortable_columns filter
- * 
+ *
  * @param array $columns
  * @since 0.1
  * @return array
@@ -616,6 +630,7 @@ function adverts_manage_post_columns( $column, $post_id ) {
 function adverts_admin_sortable_columns( $columns ) {
 
     $columns['price'] = 'price';
+    $columns['stripe_id'] = 'stripe_id';
     $columns['expires'] = 'expires';
 
     return $columns;
@@ -623,9 +638,9 @@ function adverts_admin_sortable_columns( $columns ) {
 
 /**
  * Registers 'request' filter for Adverts list in wp-admin
- * 
+ *
  * @see adverts_admin_sort()
- * 
+ *
  * @since 0.1
  * @return void
  */
@@ -635,7 +650,7 @@ function adverts_admin_load() {
 
 /**
  * Sort by adverts columns logic
- * 
+ *
  * @param array $vars
  * @since 0.1
  * @return array
@@ -656,7 +671,7 @@ function adverts_admin_sort( $vars ) {
                 )
             );
         }
-        
+
         /* Check if 'orderby' is set to 'expires'. */
         if ( isset( $vars['orderby'] ) && 'expires' == $vars['orderby'] ) {
 
@@ -675,18 +690,18 @@ function adverts_admin_sort( $vars ) {
 
 /**
  * Enqueues Adverts script styles and JS localization
- * 
+ *
  * @global string $post_type
  * @since 0.1
  * @return void
  */
 function adverts_admin_script() {
     global $post_type;
-    
+
     if( 'advert' != $post_type ) {
         return;
     }
-    
+
     wp_enqueue_style( 'adverts-admin' );
     wp_enqueue_style( 'adverts-icons' );
     wp_enqueue_style( 'adverts-icons-animate' );
@@ -695,14 +710,13 @@ function adverts_admin_script() {
     wp_enqueue_script( 'adverts-auto-numeric' );
     wp_enqueue_script( 'plupload-all' );
     wp_enqueue_script( 'suggest' );
-    
+
     wp_localize_script( 'adverts-admin', 'adverts_admin_lang', array(
         "expired" => __("Expired", "adverts"),
         "expires_on" => __("Expires:", "adverts" ),
         "expired_on" => __("Expired:", "adverts" ),
         "suggest_box_info" => __("Start typing user name, email or login below, some suggestions will appear.", "adverts")
     ) );
-    
+
     include_once ADVERTS_PATH . 'includes/gallery.php';
 }
-

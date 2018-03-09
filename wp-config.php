@@ -27,9 +27,9 @@ if (isset($_SERVER) && isset($_SERVER['SERVER_NAME'])) {
 	switch($_SERVER['SERVER_NAME'])
 	{
 	    case 'churchbay.kode8.com':
-				define('DB_NAME', 'churchbay');
-				define('DB_USER', 'churchbay');
-				define('DB_PASSWORD', 'sqBxNF7e6dXP');
+				define('DB_NAME', '');
+				define('DB_USER', '');
+				define('DB_PASSWORD', '');
 				define('DB_HOST', 'localhost');
 				define('DB_CHARSET', 'utf8');
 				define('DB_COLLATE', '');
@@ -39,8 +39,8 @@ if (isset($_SERVER) && isset($_SERVER['SERVER_NAME'])) {
 
 	    case 'localdev.churchbay.kode8.com':
 				define('DB_NAME', 'churchbay');
-				define('DB_USER', 'root');
-				define('DB_PASSWORD', 'thosoola3');
+				define('DB_USER', '');
+				define('DB_PASSWORD', '');
 				define('DB_HOST', 'localhost');
 				define('DB_CHARSET', 'utf8');
 				define('DB_COLLATE', '');
